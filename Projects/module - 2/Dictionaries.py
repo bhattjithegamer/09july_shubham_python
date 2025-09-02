@@ -6,7 +6,7 @@ data = {
 }
 
 #print(data)
-#print(data['name']) #key ni value print karva mate
+#print(data['name,age']) #key ni value print karva mate
 #print(data.get('age')) #key ni value print karva mate
 #print(data.keys()) #badha keys print karva mate
 #print(data.values()) #badha values print karva mate
@@ -31,8 +31,16 @@ data = {
 
 # data.pop('gangster country') #dictionary ma thi element remove karva mate
 
-# data.clear() #dictionary ma thi badha element remove karva mate
+# data.clear() #dictionary ma thi badha element remove karva mate 
 
+# data.popitem() #dictionary ma thi last element remove karva mate
+
+# data.setdefault('friend','rahul') #jo key na hoy to add kare ane hoy to change na kare
+
+# b = data.copy() #dictionary ni copy banava mate
+# print(b)
+
+# data.update({'friend': 'rahul'}) #dictionary ma element add/change karva mate
 # del data #dictionary delete karva mate
 print(data)
 

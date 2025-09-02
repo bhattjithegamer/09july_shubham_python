@@ -25,10 +25,10 @@ a = ('apple', 'banana', 'cherry', 'orange', 'kiwi')
 
 #======================= #
 
-name = ()
+# name = ()
 
-a = int(input("enter number: "))
-for i in range(a):
-    b = input("enter name : ")
-    name = name + (b,)
-print(name)  
+# a = int(input("enter number: "))
+# for i in range(a):
+#     b = input("enter name : ")
+#     name = name + (b,)
+# print(name)  
