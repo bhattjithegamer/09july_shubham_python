@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #333;
+  color: white;
+  padding: 15px;
+}
+nav a {
+  color: white;
+  margin-right: 15px;
+  text-decoration: none;
+}
+.search {
+  padding: 20px;
+  text-align: center;
+}
+
+    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artist Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🎶 Artist Hub</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <section class="search">
+    <h2>Find Your Artist</h2>
+    <input type="text" id="searchBox" placeholder="Search by category...">
+    <button onclick="searchArtist()">Search</button>
+  </section>
+
+  <section id="artistList">
+    <!-- JS thi dynamic list load thase -->
+  </section>
+
+  <script>
+  const artists = [
+  {name: "DJ Sam", category: "DJ"},
+  {name: "Singer Anjali", category: "Singer"},
+  {name: "Dancer Rahul", category: "Dancer"}
+];
+
+function searchArtist(){
+  let query = document.getElementById("searchBox").value.toLowerCase();
+  let result = artists.filter(a => a.category.toLowerCase().includes(query));
+  
+  let html = "";
+  result.forEach(a => {
+    html += `<p>${a.name} - ${a.category}</p>`;
+  });
+  
+  document.getElementById("artistList").innerHTML = html || "<p>No Artist Found</p>";
+}
+</script>
+</body>
+</html>
