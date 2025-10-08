@@ -1,466 +1,318 @@
-import sqlite3
+#menuly created by bhatt ji
+
+import pymysql
 import tkinter as tk
 from tkinter import messagebox
 import re
+import os
 
-def init_db():
-    conn = sqlite3.connect("meditrack.db")
-    cursor = conn.cursor()
+try:
+    db = pymysql.connect(host="localhost", user="root", password="", database="patient")
+    print("Connected to database")
+except Exception as e:
+    print(e)
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS patients (
-        patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        age INTEGER,
-        gender TEXT,
-        contact TEXT,
-        medical_history TEXT
-    )
-    ''')
-    
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS doctors (
-        doctor_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        specialization TEXT,
-        contact TEXT
-    )
-    ''')
-    
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS appointments (
-        appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        patient_id INTEGER,
-        doctor_id INTEGER,
-        date TEXT,
-        status TEXT,
-        prescription TEXT,
-        FOREIGN KEY(patient_id) REFERENCES patients(patient_id),
-        FOREIGN KEY(doctor_id) REFERENCES doctors(doctor_id)
-    )
-    ''')
-    
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS billing (
-        bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        appointment_id INTEGER,
-        consultation_fee REAL,
-        medicine_cost REAL,
-        tax REAL,
-        total_amount REAL,
-        FOREIGN KEY(appointment_id) REFERENCES appointments(appointment_id)
-    )
-    ''')
-    
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password TEXT,
-        role TEXT
-    )
-    ''')
-    
-    cursor.execute("INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)", 
-                   ("shubham", "1234", "admin"))
+cr = db.cursor()
 
-    conn.commit()
-    conn.close()
-    print("Database initialized successfully")
-
-def open_dashboard():
-    dash = tk.Tk()
-    dash.title("MediTrack Dashboard")
-    dash.geometry("400x400")
-
-    tk.Label(dash, text="Welcome to MediTrack!", font=("Arial", 16)).pack(pady=20)
-    tk.Button(dash, text="Patients", width=20, command=open_patient_form).pack(pady=5)
-    tk.Button(dash, text="Appointments", width=20, command=open_appointments_form).pack(pady=5)
-    tk.Button(dash, text="Doctors", width=20, command=open_doctor_form).pack(pady=5)
-    tk.Button(dash, text="Billing", width=20, command=open_billing_form).pack(pady=5)
-    tk.Button(dash, text="Search Patients", width=20, command=search_patients).pack(pady=5)
-    tk.Button(dash, text="Search Appointments", width=20, command=search_appointments).pack(pady=5)
-    tk.Button(dash, text="Manage Patients", width=20, command=manage_patients).pack(pady=5)
-    tk.Button(dash, text="Logout", width=20, command=dash.destroy).pack(pady=20)
+try:
+    table_p = ("""CREATE TABLE IF NOT EXISTS patients(id INT AUTO_INCREMENT PRIMARY KEY,name TEXT,age INT)""")
+    try:
+        cr.execute(table_p)
+        db.commit()
+        print("done")
+    except Exception as e:
+        print(e)
     
 
+    table_a = ("""CREATE TABLE IF NOT EXISTS appointments(id INT AUTO_INCREMENT PRIMARY KEY,patient_id INT,doctor TEXT,date TEXT,time TEXT,notes TEXT,FOREIGN KEY(patient_id) REFERENCES patients(id))""")
+    try:
+        cr.execute(table_a)
+        db.commit()
+        print("done")
+    except Exception as e:
+        print(e)
+   
 
-    dash.mainloop()
+    table_u = ("""CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY,username varchar(100) unique,password varchar(100),role VARCHAR(50))""")
+    try:
+        cr.execute(table_u)
+        db.commit()
+        print("done")
+    except Exception as e:
+        print(e)
 
-def open_patient_form():
-    pf = tk.Toplevel()  
-    pf.title("Add Patient")
-    pf.geometry("400x400")
+    table_b = "create table if not exists bill(id int auto_increment primary key,patient_id int ,amount float ,description TEXT,date TEXT,FOREIGN KEY(patient_id) REFERENCES patients(id))"
+    try:
+        cr.execute(table_b)
+        db.commit()
+        print("done")
+    except Exception as e:
+        print(e)
 
-    tk.Label(pf, text="Add New Patient", font=("Arial", 14)).pack(pady=10)
+    cr.execute("select * from users where username='admin'")
+    if not cr.fetchone():
+        cr.execute("insert into users(username,password,role) VALUES(%s,%s,%s)",
+                   ("admin", "admin123", "Admin"))
+        db.commit()
+        print("Default admin created")
 
-    tk.Label(pf, text="Name").pack()
-    name_entry = tk.Entry(pf)
-    name_entry.pack()
+except Exception as e:
+    print("error in table ", e)
 
-    tk.Label(pf, text="Age").pack()
-    age_entry = tk.Entry(pf)
-    age_entry.pack()
+class Patient:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
-    tk.Label(pf, text="Gender").pack()
-    gender_entry = tk.Entry(pf)
-    gender_entry.pack()
+    def save(self):
+        try:
+            cr.execute("INSERT INTO patients(name, age) VALUES (%s,%s)", (self.name, self.age))
+            db.commit()
+            messagebox.showinfo("patient saved")
+        except Exception as e:
+            messagebox.showerror("Cannot save patient: ",e)
 
-    tk.Label(pf, text="Contact").pack()
-    contact_entry = tk.Entry(pf)
-    contact_entry.pack()
+class Appointment:
+    def __init__(self, pid, doctor, date, time, notes):
+        self.pid = pid
+        self.doctor = doctor
+        self.date = date
+        self.time = time
+        self.notes = notes
 
-    tk.Label(pf, text="Medical History").pack()
-    medhist_entry = tk.Entry(pf)
-    medhist_entry.pack()
+    def save(self):
+        try:
+            cr.execute("insert into appointments(patient_id, doctor, date, time, notes) VALUES (%s,%s,%s,%s,%s)",
+                       (self.pid, self.doctor, self.date, self.time, self.notes))
+            db.commit()
+            messagebox.showinfo("appointment saved")
+        except Exception as e:
+            messagebox.showerror("Cannot save appointment: ",e)
+
+def login_page():
+    login = tk.Tk()
+    login.title("login")
+    login.geometry("400x350")
+
+    tk.Label(login, text="Username:").place(x=30, y=40)
+    username_entry = tk.Entry(login)
+    username_entry.place(x=100, y=40)
+
+    tk.Label(login, text="Password:").place(x=30, y=60)
+    password_entry = tk.Entry(login)
+    password_entry.place(x=100, y=70)
+
+    def check_login():
+        u = username_entry.get()
+        p = password_entry.get()
+        cr.execute("select role from users where username=%s AND password=%s", (u, p))
+        data = cr.fetchone()
+        if data:
+            role = data[0]
+            messagebox.showinfo("Login Success",u)
+            login.destroy()
+            main_screen(role)
+        else:
+            messagebox.showerror("wrong username or password")
+
+    tk.Button(login, text="Login", command=check_login, bg="green", fg="white").place(x=100, y=130)
+    login.mainloop()
+
+def main_screen(user_role):
+    screen = tk.Tk()
+    screen.title("MediTrack App")
+    screen.geometry("1000x600")
+    screen.config(bg="light blue")
+
+    tk.Label(screen, text="Name", bg="light blue", fg="red").place(x=50, y=50)
+    name_entry = tk.Entry(screen)
+    name_entry.place(x=150, y=50)
+
+    tk.Label(screen, text="Age", bg="light blue", fg="red").place(x=50, y=80)
+    age_entry = tk.Entry(screen)
+    age_entry.place(x=150, y=80)
+
+    tk.Label(screen, text="Patient ID", bg="light blue", fg="red").place(x=50, y=120)
+    patient_id_entry = tk.Entry(screen)
+    patient_id_entry.place(x=150, y=120)
+
+    tk.Label(screen, text="Doctor", bg="light blue", fg="red").place(x=50, y=160)
+    doctor_entry = tk.Entry(screen)
+    doctor_entry.place(x=150, y=160)
+
+    tk.Label(screen, text="Date", bg="light blue", fg="red").place(x=50, y=190)
+    date_entry = tk.Entry(screen)
+    date_entry.place(x=150, y=190)
+
+    tk.Label(screen, text="Time", bg="light blue", fg="red").place(x=50, y=220)
+    time_entry = tk.Entry(screen)
+    time_entry.place(x=150, y=220)
+
+    tk.Label(screen, text="Notes", bg="light blue", fg="red").place(x=50, y=250)
+    notes_entry = tk.Entry(screen)
+    notes_entry.place(x=150, y=250)
+
+    tk.Label(screen, text="Amount", bg="light blue", fg="red").place(x=50, y=300)
+    amount_entry = tk.Entry(screen)
+    amount_entry.place(x=150, y=300)
+
+    tk.Label(screen, text="Tax (%)", bg="light blue", fg="red").place(x=50, y=330)
+    tax_entry = tk.Entry(screen)
+    tax_entry.insert(0, "10")  
+    tax_entry.place(x=150, y=330)
+
+    tk.Label(screen, text="Description", bg="light blue", fg="red").place(x=50, y=330)
+    desc_entry = tk.Entry(screen)
+    desc_entry.place(x=150, y=330)
+
+    from datetime import datetime
 
     def save_patient():
-        name = name_entry.get()
-        age = age_entry.get()
-        gender = gender_entry.get()
-        contact = contact_entry.get()
-        medhist = medhist_entry.get()
-
-        if not name or not age or not contact:
-            messagebox.showerror("Error", "Name, Age, Contact are required!")
-            return
-
         try:
-            age = int(age)
-        except:
-            messagebox.showerror("Error", "Age must be a number")
-            return
+            name = name_entry.get()
+            age = int(age_entry.get())
+            p = Patient(name, age)
+            p.save()
+            messagebox.showinfo("Success", "Patient saved successfully!")
+        except ValueError:
+            messagebox.showerror("error","please enter a valid number for age.")
+        except Exception as e:
+            messagebox.showerror(e)
 
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO patients (name, age, gender, contact, medical_history) VALUES (?, ?, ?, ?, ?)",
-            (name, age, gender, contact, medhist)
-        )
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Success", f"Patient {name} added!")
-        pf.destroy()  
+    tk.Button(screen, text="Save Patient", command=save_patient, bg="green", fg="white").place(x=350, y=50)
 
-    tk.Button(pf, text="Save Patient", command=save_patient).pack(pady=20)
-
-def open_appointments_form():
-    appt = tk.Toplevel()
-    appt.title("Add Appointment")
-    appt.geometry("400x400")
-
-    tk.Label(appt, text="Add New Appointment", font=("Arial", 14)).pack(pady=10)
-
-    conn = sqlite3.connect("meditrack.db")
-    cursor = conn.cursor()
-
-    # Patients list
-    cursor.execute("SELECT patient_id, name FROM patients")
-    patients = cursor.fetchall()
-    patient_dict = {f"{pid} - {name}": pid for pid, name in patients}
-    patient_var = tk.StringVar()
-    if patients:
-        patient_var.set(list(patient_dict.keys())[0])
-    tk.Label(appt, text="Select Patient").pack()
-    tk.OptionMenu(appt, patient_var, *patient_dict.keys()).pack()
-
-    # Doctors list
-    cursor.execute("SELECT doctor_id, name FROM doctors")
-    doctors = cursor.fetchall()
-    doctor_dict = {f"{did} - {name}": did for did, name in doctors}
-    doctor_var = tk.StringVar()
-    if doctors:
-        doctor_var.set(list(doctor_dict.keys())[0])
-    tk.Label(appt, text="Select Doctor").pack()
-    tk.OptionMenu(appt, doctor_var, *doctor_dict.keys()).pack()
-
-    tk.Label(appt, text="Date (YYYY-MM-DD)").pack()
-    date_entry = tk.Entry(appt)
-    date_entry.pack()
-
-    tk.Label(appt, text="Status").pack()
-    status_entry = tk.Entry(appt)
-    status_entry.pack()
-
-    tk.Label(appt, text="Prescription").pack()
-    prescription_entry = tk.Entry(appt)
-    prescription_entry.pack()
-
-    def save_appointment():
-        patient_id = patient_dict.get(patient_var.get())
-        doctor_id = doctor_dict.get(doctor_var.get()) if doctors else None
-        date = date_entry.get()
-        status = status_entry.get()
-        prescription = prescription_entry.get()
-
-        if not patient_id or not date:
-            messagebox.showerror("Error", "Patient and Date are required")
-            return
-
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO appointments (patient_id, doctor_id, date, status, prescription) VALUES (?, ?, ?, ?, ?)",
-            (patient_id, doctor_id, date, status, prescription)
-        )
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Success", "Appointment added!")
-        appt.destroy()
-
-    tk.Button(appt, text="Save Appointment", command=save_appointment).pack(pady=20)
-
-def open_doctor_form():
-    doc = tk.Toplevel()
-    doc.title("Add Doctor")
-    doc.geometry("400x350")
-
-    tk.Label(doc, text="Add New Doctor", font=("Arial", 14)).pack(pady=10)
-
-    tk.Label(doc, text="Name").pack()
-    name_entry = tk.Entry(doc)
-    name_entry.pack()
-
-    tk.Label(doc, text="Specialization").pack()
-    spec_entry = tk.Entry(doc)
-    spec_entry.pack()
-
-    tk.Label(doc, text="Contact").pack()
-    contact_entry = tk.Entry(doc)
-    contact_entry.pack()
-
-    def save_doctor():
-        name = name_entry.get()
-        spec = spec_entry.get()
-        contact = contact_entry.get()
-
-        if not name:
-            messagebox.showerror("Error", "Name is required!")
-            return
-
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO doctors (name, specialization, contact) VALUES (?, ?, ?)",
-            (name, spec, contact)
-        )
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Success", f"Doctor {name} added!")
-        doc.destroy()
-
-    tk.Button(doc, text="Save Doctor", command=save_doctor).pack(pady=20)
-
-
-def open_billing_form():
-    bill = tk.Toplevel()
-    bill.title("Add Billing")
-    bill.geometry("400x400")
-
-    tk.Label(bill, text="Billing Details", font=("Arial", 14)).pack(pady=10)
-
-    conn = sqlite3.connect("meditrack.db")
-    cursor = conn.cursor()
-
-    # Appointment list
-    cursor.execute("SELECT appointment_id, patient_id FROM appointments")
-    appointments = cursor.fetchall()
-    appt_dict = {f"Appointment {aid} (Patient {pid})": aid for aid, pid in appointments}
-    appt_var = tk.StringVar()
-    if appointments:
-        appt_var.set(list(appt_dict.keys())[0])
-
-    tk.Label(bill, text="Select Appointment").pack()
-    tk.OptionMenu(bill, appt_var, *appt_dict.keys()).pack()
-
-    tk.Label(bill, text="Consultation Fee").pack()
-    consult_entry = tk.Entry(bill)
-    consult_entry.pack()
-
-    tk.Label(bill, text="Medicine Cost").pack()
-    med_entry = tk.Entry(bill)
-    med_entry.pack()
-
-    tk.Label(bill, text="Tax (%)").pack()
-    tax_entry = tk.Entry(bill)
-    tax_entry.pack()
-
-    def save_billing():
-        appt_id = appt_dict.get(appt_var.get())
-        try:
-            consultation = float(consult_entry.get())
-            medicine = float(med_entry.get())
-            tax = float(tax_entry.get())
-        except:
-            messagebox.showerror("Error", "Please enter valid numbers for fees/cost/tax")
-            return
-
-        total = consultation + medicine + (consultation + medicine) * tax / 100
-
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO billing (appointment_id, consultation_fee, medicine_cost, tax, total_amount) VALUES (?, ?, ?, ?, ?)",
-            (appt_id, consultation, medicine, tax, total)
-        )
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Success", f"Billing saved! Total = {total}")
-        bill.destroy()
-
-    tk.Button(bill, text="Save Billing", command=save_billing).pack(pady=20)
-
-def search_patients():
-    sp = tk.Toplevel()
-    sp.title("Search Patients")
-    sp.geometry("400x400")
-
-    tk.Label(sp, text="Enter Regex Pattern (Medical History)", font=("Arial", 12)).pack(pady=10)
-    pattern_entry = tk.Entry(sp)
-    pattern_entry.pack()
-
-    result_box = tk.Text(sp, height=15, width=45)
-    result_box.pack(pady=10)
-
-    def perform_search():
-        pattern = pattern_entry.get()
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT name, medical_history FROM patients")
-        patients = cursor.fetchall()
-        conn.close()
-
-        result_box.delete("1.0", tk.END)
-
-        for name, medhist in patients:
-            if re.search(pattern, medhist, re.IGNORECASE):
-                result_box.insert(tk.END, f"{name} : {medhist}\n")
-
-    tk.Button(sp, text="Search", command=perform_search).pack(pady=10)
-
-
-def search_appointments():
-    sa = tk.Toplevel()
-    sa.title("Search Appointments")
-    sa.geometry("400x400")
-
-    tk.Label(sa, text="Enter Regex Pattern (Status/Prescription)", font=("Arial", 12)).pack(pady=10)
-    pattern_entry = tk.Entry(sa)
-    pattern_entry.pack()
-
-    result_box = tk.Text(sa, height=15, width=45)
-    result_box.pack(pady=10)
-
-    def perform_search():
-        pattern = pattern_entry.get()
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT appointment_id, status, prescription FROM appointments")
-        appointments = cursor.fetchall()
-        conn.close()
-
-        result_box.delete("1.0", tk.END)
-
-        for aid, status, pres in appointments:
-            if re.search(pattern, status + " " + (pres or ""), re.IGNORECASE):
-                result_box.insert(tk.END, f"Appointment {aid} : {status} / {pres}\n")
-
-    tk.Button(sa, text="Search", command=perform_search).pack(pady=10)
-
-def manage_patients():
-    mp = tk.Toplevel()
-    mp.title("Manage Patients")
-    mp.geometry("500x400")
-
-    conn = sqlite3.connect("meditrack.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT patient_id, name FROM patients")
-    patients = cursor.fetchall()
-    conn.close()
-
-    patient_dict = {f"{pid} - {name}": pid for pid, name in patients}
-    patient_var = tk.StringVar()
-    if patients:
-        patient_var.set(list(patient_dict.keys())[0])
-
-    tk.Label(mp, text="Select Patient").pack()
-    tk.OptionMenu(mp, patient_var, *patient_dict.keys()).pack()
-
-    tk.Label(mp, text="Update Name").pack()
-    name_entry = tk.Entry(mp)
-    name_entry.pack()
-
-    tk.Label(mp, text="Update Age").pack()
-    age_entry = tk.Entry(mp)
-    age_entry.pack()
 
     def update_patient():
-        pid = patient_dict.get(patient_var.get())
+        pid = patient_id_entry.get()
         name = name_entry.get()
         age = age_entry.get()
-        if not pid or not name or not age:
-            messagebox.showerror("Error", "Patient & new data required")
+        try:
+            cr.execute("UPDATE patients SET name=%s, age=%s WHERE id=%s", (name, age, pid))
+            db.commit()
+            messagebox.showinfo("Success", "Patient updated")
+        except Exception as e:
+            messagebox.showerror(e)
+    tk.Button(screen, text="Update Patient", command=update_patient, bg="orange", fg="black").place(x=350, y=80)
+
+
+    def search_patient():
+        pid = patient_id_entry.get()
+        try:
+            cr.execute("SELECT * FROM patients WHERE id=%s", (pid,))
+            data = cr.fetchone()
+            if data:
+                name_entry.delete(0,'end')
+                age_entry.delete(0,'end')
+                name_entry.insert(0, data[1])
+                age_entry.insert(0, data[2])
+                messagebox.showinfo("Found","Patient Found:\nID: {}\nName: {}\nAge: {}".format(data[0], data[1], data[2]))
+            else:
+                messagebox.showwarning("patient not found")
+        except Exception as e:
+            messagebox.showerror(e)
+    tk.Button(screen, text="Search Patient", command=search_patient, bg="blue", fg="white").place(x=450, y=50)
+
+    def save_appointment():
+        pid = patient_id_entry.get()
+        doctor = doctor_entry.get()
+        date = date_entry.get()
+        time = time_entry.get()
+        notes = notes_entry.get()
+        
+        if pid.strip() == "" or doctor.strip() == "" or date.strip() == "" or time.strip() == "":
+            messagebox.showwarning("Warning", "Fill required fields")
+            return
+        
+        a = Appointment(pid, doctor, date, time, notes)
+        a.save()
+    tk.Button(screen, text="Save Appointment", command=save_appointment, bg="purple", fg="white").place(x=350, y=160)
+
+    def show_visits():
+        pid = patient_id_entry.get().strip()
+        if not pid:
+            messagebox.showwarning("Warning", "Enter Patient ID")
             return
         try:
-            age = int(age)
-        except:
-            messagebox.showerror("Error", "Age must be a number")
-            return
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute("UPDATE patients SET name=?, age=? WHERE patient_id=?", (name, age, pid))
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Success", "Patient updated!")
+            cr.execute("SELECT doctor,date,time,notes FROM appointments WHERE patient_id=%s", (pid,))
+            visits = cr.fetchall()
+            if not visits:
+                messagebox.showwarning("No Visits", "No visits found")
+                return
 
-    def delete_patient():
-        pid = patient_dict.get(patient_var.get())
+            display_text = ""
+            for v in visits:
+                display_text += str(v) + "\n"
+
+            messagebox.showinfo("visit history", display_text)
+
+        except Exception as e:
+            messagebox.showerror("cant see",e)
+
+    tk.Button(screen, text="Show Visits", command=show_visits, bg="brown", fg="white").place(x=350, y=190)
+
+
+    def search_by_notes():
+        pattern = notes_entry.get().strip()
+        if not pattern:
+            messagebox.showwarning("Warning", "Enter pattern to search")
+            return
+
+        try:
+            cr.execute("SELECT * FROM appointments")
+            all_appointments = cr.fetchall()
+
+            matched = [a for a in all_appointments if re.search(pattern, a[5], re.IGNORECASE)]
+            if not matched:
+                messagebox.showinfo("No Match", "No matching records found")
+                return
+
+            display_text = ""
+            for m in matched:
+                display_text += str(m) + "\n"   
+            messagebox.showinfo("Matched Appointments", display_text)
+        except Exception as e:
+            messagebox.showerror("error", str(e))
+
+    tk.Button(screen, text="Search Notes", command=search_by_notes, bg="pink", fg="black").place(x=350, y=220)
+
+    def save_bill():
+        pid = patient_id_entry.get()
+        amount = amount_entry.get()
+        tax = tax_entry.get()
+        desc = desc_entry.get()
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if pid == "" or amount == "":
+            messagebox.showwarning("Warning", "Enter Patient ID and Amount")
+            return
+
+        try:
+            total = float(amount) + (float(amount) * float(tax) / 100)
+            cr.execute("INSERT INTO bill(patient_id, amount, description, date) VALUES (%s,%s,%s,%s)",
+                       (pid, total, desc, date))
+            db.commit()
+            messagebox.showinfo("Success", f"Bill saved with tax.\nTotal: ₹{total}")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def show_bills():
+        pid = patient_id_entry.get()
         if not pid:
+            messagebox.showwarning("Warning", "Enter Patient ID")
             return
-        conn = sqlite3.connect("meditrack.db")
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM patients WHERE patient_id=?", (pid,))
-        conn.commit()
-        conn.close()
-        messagebox.showinfo("Deleted", "Patient removed!")
+        cr.execute("SELECT * FROM bill WHERE patient_id=%s", (pid,))
+        bills = cr.fetchall()
+        if bills:
+            msg = ""
+            for b in bills:
+                msg += f"ID: {b[0]} | Amount: {b[2]} | Desc: {b[3]} | Date: {b[4]}\n"
+            messagebox.showinfo("Bill History", msg)
+        else:
+            messagebox.showinfo("No Bills", "No bills found")
 
-    tk.Button(mp, text="Update Patient", command=update_patient).pack(pady=5)
-    tk.Button(mp, text="Delete Patient", command=delete_patient).pack(pady=5)
+    tk.Button(screen, text="Save Bill", command=save_bill, bg="dark green", fg="white").place(x=350, y=300)
+    tk.Button(screen, text="Show Bills", command=show_bills, bg="teal", fg="white").place(x=450, y=300)
 
+    screen.mainloop()
 
-def login():
-    u = entry_user.get()
-    p = entry_pass.get()
-
-    conn = sqlite3.connect("meditrack.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (u, p))
-    result = cursor.fetchone()
-    conn.close()
-
-    if result:
-        messagebox.showinfo("Login", "Login Successful")
-        root.destroy()
-        open_dashboard()
-    else:
-        messagebox.showerror("Login", "Invalid Username/Password")
-
-init_db()  
-
-root = tk.Tk()
-root.title("MediTrack Login")
-root.geometry("400x250")
-
-tk.Label(root, text="MediTrack Login", font=("Arial", 16)).pack(pady=10)
-
-tk.Label(root, text="Username").pack()
-entry_user = tk.Entry(root)
-entry_user.pack()
-
-tk.Label(root, text="Password").pack()
-entry_pass = tk.Entry(root, show="*")
-entry_pass.pack()
-
-tk.Button(root, text="Login", command=login).pack(pady=10)
-
-root.mainloop()
+login_page()

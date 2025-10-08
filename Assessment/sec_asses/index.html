@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+            form {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin: 5px 0 2px 0;
+}
+
+input, select {
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        button{
+            padding: 10px 20px;
+            border-radius: 5px;
+            color:#00d9ff;
+            cursor: pointer;
+            margin: 1 2px; 
+            background-color: #2f25be;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            align-items: center;   
+        }
+
+        .view { background-color: #28a745; }
+        .edit { background-color: #ffc107; color: black; }
+        .delete { background-color: #dc3545; }
+
+        /* Popup styling */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            width: 300px;
+            text-align: center;
+        }
+
+        #popup h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        #popup button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Doctor Details</h2>
+
+    <table id="doctorTable">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Contact</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Dr. Meera Patel</td>
+            <td>Cardiologist</td>
+            <td>9876543210</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Dr. Raj Shah</td>
+            <td>Dermatologist</td>
+            <td>9823456789</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Dr.Neha Shah</td>
+            <td>Ophthalmologist</td>
+            <td>1234567890</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Dr.Riya Mehta</td>
+            <td>Neurologist</td>
+            <td>0987654321</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td> Dr.Aarav Joshi</td>
+            <td>Orthopedic Surgeon</td>
+            <td>0987654321</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td> Dr.Sneha Desai</td>
+            <td>Pediatrician</td>
+            <td>0987654321</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        
+    </table>
+    <a href="user_admin.html">
+  <button>Go to user Details</button>
+</a>
+<div id="popup">
+        <h3>Doctor Information</h3>
+        <p id="popup-content"></p>
+        <button class="btn" style="background-color:#007bff;" onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+// ===== VIEW BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".view").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+        const id = row.cells[0].innerText;
+        const name = row.cells[1].innerText;
+        const specialization = row.cells[2].innerText;
+        const contact = row.cells[3].innerText;
+
+        alert(
+            `Doctor Details:\n\n` +
+            `ID: ${id}\n` +
+            `Name: ${name}\n` +
+            `Specialization: ${specialization}\n` +
+            `Contact: ${contact}`
+        );
+    });
+});
+
+
+// ===== EDIT BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".edit").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+
+        const newName = prompt("Enter new Name:", row.cells[1].innerText);
+        const newSpecialization = prompt("Enter new Specialization:", row.cells[2].innerText);
+        const newContact = prompt("Enter new Contact Number:", row.cells[3].innerText);
+
+        if (newName && newSpecialization && newContact) {
+            row.cells[1].innerText = newName;
+            row.cells[2].innerText = newSpecialization;
+            row.cells[3].innerText = newContact;
+            alert("Doctor details updated successfully!");
+        } else {
+            alert("Edit cancelled or incomplete.");
+        }
+    });
+});
+
+
+// ===== DELETE BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".delete").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+        const name = row.cells[1].innerText;
+
+        if (confirm(`Are you sure you want to delete Dr. ${name}?`)) {
+            row.remove();
+            alert("Doctor deleted successfully!");
+        }
+    });
+});
+</script>
+
+
+<table>
+    
+        <h2>Create Appointment</h2>
+         <table id="doctorAppointmentForm">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Details</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Consultation Appointment</td>
+            <td>For discussing reports, symptoms</td>
+            <td>19/2</td> 
+            <td>8to9</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Emergency Appointment</td>
+            <td>For urgent or sudden health issues</td>
+            <td>10/2</td> 
+            <td>9to10</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Specialist Appointment</td>
+            <td>referred to a specialist Cardiologist</td>
+            <td>11/11</td> 
+            <td>9to10</td>
+            <td>
+                <button class="btn view">View</button>
+                <button class="btn edit">Edit</button>
+                <button class="btn delete">Delete</button>
+            </td>
+        </tr>
+        
+    </table>
+    <button id="addAppointmentBtn" class="btn add" style="margin-top: 15px; background-color: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer;">
+     Create New Appointment
+</button>
+<script>
+document.getElementById("addAppointmentBtn").addEventListener("click", function () {
+    const table = document.querySelector("#doctorAppointmentForm");
+
+    // Get new appointment details from user
+    const id = table.rows.length; // Auto ID
+    const title = prompt("Enter Appointment Title:");
+    const details = prompt("Enter Appointment Details:");
+    const date = prompt("Enter Appointment Date (e.g. 12/10):");
+    const time = prompt("Enter Appointment Time (e.g. 10am-11am):");
+
+    if (title && details && date && time) {
+        // Create new row
+        const newRow = table.insertRow();
+
+        newRow.innerHTML = `
+            <td>${id}</td>
+            <td>${title}</td>
+            <td>${details}</td>
+            <td>${date}</td>
+            <td>${time}</td>
+            <td>
+                <button class="btn view" style="background-color: green; color: white;">View</button>
+                <button class="btn edit" style="background-color: blue; color: white;">Edit</button>
+                <button class="btn delete" style="background-color: red; color: white;">Delete</button>
+            </td>
+        `;
+
+        alert(" Appointment added successfully!");
+        attachButtonEvents(); // Reattach button functions for new row
+    } else {
+        alert(" Appointment creation cancelled or incomplete.");
+    }
+});
+
+function attachButtonEvents() {
+    // View
+    document.querySelectorAll(".view").forEach(button => {
+        button.onclick = function () {
+            const row = this.closest("tr");
+            alert(`Appointment Details:\n\nID: ${row.cells[0].innerText}\nTitle: ${row.cells[1].innerText}\nDetails: ${row.cells[2].innerText}\nDate: ${row.cells[3].innerText}\nTime: ${row.cells[4].innerText}`);
+        };
+    });
+
+    // Edit
+    document.querySelectorAll(".edit").forEach(button => {
+        button.onclick = function () {
+            const row = this.closest("tr");
+            const newTitle = prompt("Enter new Title:", row.cells[1].innerText);
+            const newDetails = prompt("Enter new Details:", row.cells[2].innerText);
+            const newDate = prompt("Enter new Date:", row.cells[3].innerText);
+            const newTime = prompt("Enter new Time:", row.cells[4].innerText);
+
+            if (newTitle && newDetails && newDate && newTime) {
+                row.cells[1].innerText = newTitle;
+                row.cells[2].innerText = newDetails;
+                row.cells[3].innerText = newDate;
+                row.cells[4].innerText = newTime;
+                alert("Appointment updated successfully!");
+            } else {
+                alert(" Edit cancelled or incomplete.");
+            }
+        };
+    });
+
+    // Delete
+    document.querySelectorAll(".delete").forEach(button => {
+        button.onclick = function () {
+            const row = this.closest("tr");
+            const title = row.cells[1].innerText;
+            if (confirm(`Are you sure you want to delete "${title}"?`)) {
+                row.remove();
+                alert(" Appointment deleted successfully!");
+            }
+        };
+    });
+}
+
+// Initial attach for existing buttons
+attachButtonEvents();
+</script>
+
+    
+
+<script>
+// ===== VIEW BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".view").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+        const id = row.cells[0].innerText;
+        const title = row.cells[1].innerText;
+        const details = row.cells[2].innerText;
+        const date = row.cells[3].innerText;
+        const time = row.cells[4].innerText;
+
+        alert(
+            `Appointment Details:\n\n` +
+            `ID: ${id}\n` +
+            `Title: ${title}\n` +
+            `Details: ${details}\n` +
+            `Date: ${date}\n` +
+            `Time: ${time}`
+        );
+    });
+});
+
+
+// ===== EDIT BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".edit").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+
+        const newTitle = prompt("Enter new Appointment Title:", row.cells[1].innerText);
+        const newDetails = prompt("Enter new Appointment Details:", row.cells[2].innerText);
+        const newDate = prompt("Enter new Appointment Date:", row.cells[3].innerText);
+        const newTime = prompt("Enter new Appointment Time:", row.cells[4].innerText);
+
+        if (newTitle && newDetails && newDate && newTime) {
+            row.cells[1].innerText = newTitle;
+            row.cells[2].innerText = newDetails;
+            row.cells[3].innerText = newDate;
+            row.cells[4].innerText = newTime;
+            alert("Appointment updated successfully!");
+        } else {
+            alert("Edit cancelled or incomplete.");
+        }
+    });
+});
+
+
+// ===== DELETE BUTTON FUNCTIONALITY =====
+document.querySelectorAll(".delete").forEach(button => {
+    button.addEventListener("click", function () {
+        const row = this.closest("tr");
+        const title = row.cells[1].innerText;
+
+        if (confirm(`Are you sure you want to delete the appointment: "${title}"?`)) {
+            row.remove();
+            alert("Appointment deleted successfully!");
+        }
+    });
+});
+</script> 
+</body>
+</html>

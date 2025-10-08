@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register Page</title>
+  <style>
+    :root{
+      --bg: #f3f6ff;
+      --card: #ffffff;
+      --accent: #3b82f6;
+      --muted: #6b7280;
+      --radius: 12px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue', Arial;
+    }
+    *{box-sizing: border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg, var(--bg), #e8f0ff);
+      padding:24px;
+    }
+    .card{
+      width:100%;
+      max-width:920px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow: 0 8px 30px rgba(20,30,60,0.08);
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      overflow:hidden;
+    }
+    .left{
+      padding:40px;
+      background: linear-gradient(180deg, rgba(59,130,246,0.06), rgba(99,102,241,0.02));
+    }
+    .brand{
+      font-weight:700;
+      font-size:20px;
+      color:var(--accent);
+      margin-bottom:18px;
+    }
+    h1{margin:0 0 10px 0; font-size:24px}
+    p.lead{color:var(--muted); margin-top:0}
+
+    form{display:grid; gap:12px}
+    .row{display:flex; gap:12px}
+    .col{flex:1}
+    label{display:block; font-size:13px; color:#111827; margin-bottom:6px}
+    input[type="text"], input[type="email"], input[type="password"], input[type="tel"], textarea, select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #e6e9ef;
+      font-size:14px;
+      outline:none;
+    }
+    input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px rgba(59,130,246,0.08); border-color:var(--accent)}
+    .actions{display:flex; align-items:center; justify-content:space-between; margin-top:6px}
+    .btn{
+      background:var(--accent);
+      color:white;
+      padding:10px 16px;
+      border-radius:10px;
+      border:none;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .btn.ghost{background:transparent; color:var(--accent); border:1px solid rgba(59,130,246,0.12)}
+    .right{
+      padding:32px;
+      background: linear-gradient(180deg,#fbfdff,#ffffff);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+    }
+    .avatar{
+      width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:28px;box-shadow:0 8px 20px rgba(59,130,246,0.18)
+    }
+    .muted{color:var(--muted); font-size:13px}
+    .error{color:#ef4444; font-size:13px}
+    @media (max-width:880px){
+      .card{grid-template-columns:1fr;}
+      .right{order:-1}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="left">
+      <div class="brand">My Site</div>
+      <h1>Register</h1>
+      <p class="lead">Enter your details to create an account.</p>
+
+      <form id="registerForm" onsubmit="return handleSubmit(event)">
+        <div class="row">
+          <div class="col">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="Your full name" required>
+          </div>
+          <div class="col">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" placeholder="e.g. 9876543210" pattern="[0-9]{10}" required>
+          </div>
+        </div>
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="example@mail.com" required>
+
+        <div class="row">
+          <div class="col">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Minimum 8 characters" minlength="8" required>
+          </div>
+          <div class="col">
+            <label for="confirm">Confirm Password</label>
+            <input id="confirm" name="confirm" type="password" placeholder="Repeat password" minlength="8" required>
+          </div>
+        </div>
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+          <option value="">-- Select --</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="address">Address (optional)</label>
+        <textarea id="address" name="address" rows="3" placeholder="Your address"></textarea>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-top:6px">
+          <input id="terms" name="terms" type="checkbox" required>
+          <label for="terms" style="margin:0">I agree to the terms and conditions</label>
+        </div>
+
+        <div class="actions">
+          <div style="display:flex; gap:8px; align-items:center">
+            <button type="button" class="btn ghost" onclick="fillExample()">Fill Example</button>
+            <div id="msg" class="muted"></div>
+          </div>
+          <button class="btn" type="submit">Register</button>
+        </div>
+        <div id="error" class="error" aria-live="polite"></div>
+      </form>
+
+    </div>
+
+    <div class="right">
+      <div class="avatar">UJ</div>
+      <div style="text-align:center">
+        <div style="font-weight:700">New here?</div>
+        <div class="muted">Get benefits: faster checkout, profile, and more</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function fillExample(){
+      document.getElementById('name').value = 'Bhatt Ji';
+      document.getElementById('phone').value = '9876543210';
+      document.getElementById('email').value = 'bhatt@example.com';
+      document.getElementById('password').value = 'password123';
+      document.getElementById('confirm').value = 'password123';
+      document.getElementById('gender').value = 'male';
+      document.getElementById('terms').checked = true;
+      document.getElementById('msg').textContent = 'Example data filled';
+      setTimeout(()=> document.getElementById('msg').textContent='', 2000);
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const errEl = document.getElementById('error');
+      errEl.textContent = '';
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const pwd = document.getElementById('password').value;
+      const conf = document.getElementById('confirm').value;
+      const terms = document.getElementById('terms').checked;
+
+      // basic validations
+      if(!name || !email || !phone || !pwd || !conf) { errEl.textContent = 'Please fill all required fields.'; return false }
+      if(pwd.length < 8){ errEl.textContent = 'Password must be at least 8 characters.'; return false }
+      if(pwd !== conf){ errEl.textContent = 'Password and confirm password do not match.'; return false }
+      if(!/^[0-9]{10}$/.test(phone)){ errEl.textContent = 'Phone number must be 10 digits.'; return false }
+      if(!terms){ errEl.textContent = 'Please accept the terms and conditions.'; return false }
+
+      // success (for demo show alert). Replace with fetch/ajax to send to server.
+      alert('Registered successfully!\nThis is a demo form — add fetch/ajax to submit to a real server.');
+      document.getElementById('registerForm').reset();
+      return false;
+    }
+  </script>
+</body>
+</html>
