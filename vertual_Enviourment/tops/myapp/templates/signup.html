@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+{% extends "base.html" %}
+{% block title %}Signup{% endblock %}
+{% block content %}
+<div class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+<div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+<h2 class="text-3xl font-bold text-center mb-6 text-blue-600">Signup</h2>
+
+{% if msg %}
+<p class="text-red-500 text-center mb-4">{{ msg }}</p>
+{% endif %}
+
+<form method="post">
+{% csrf_token %}
+<label class="block mb-2 font-medium">Full Name</label>
+<input name="fullname" type="text" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter your full name" />
+
+
+<label class="block mb-2 font-medium">Email</label>
+<input name="email" type="email" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter your email" />
+
+
+<label class="block mb-2 font-medium">Password</label>
+<input name="password" type="password" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Create password" />
+
+<button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Signup</button>
+</form>
+<p class="text-center mt-4">Already have an account? <a href="/login" class="text-blue-600 hover:underline">Login</a></p>
+</div>
+</div>
+
+{% endblock %}
+</body>
+</html>

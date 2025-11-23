@@ -1,0 +1,66 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Manage Posts</h1>
+        <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow">
+            + Add New Post
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white shadow-md rounded my-6 overflow-x-auto">
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr class="w-full bg-gray-800 text-white uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">ID</th>
+                    <th class="py-3 px-6 text-left">Title</th>
+                    <th class="py-3 px-6 text-center">Author</th>
+                    <th class="py-3 px-6 text-center">Status</th>
+                    <th class="py-3 px-6 text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+                <!-- Loop Start (Dummy Data for now) -->
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap font-bold">1</td>
+                    <td class="py-3 px-6 text-left">Django for Beginners</td>
+                    <td class="py-3 px-6 text-center">Admin</td>
+                    <td class="py-3 px-6 text-center">
+                        <span class="bg-green-200 text-green-600 py-1 px-3 rounded-full text-xs">Published</span>
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
+                            <a href="#" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="w-4 mr-2 transform hover:text-red-500 hover:scale-110">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Example Row 2 -->
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left whitespace-nowrap font-bold">2</td>
+                    <td class="py-3 px-6 text-left">Why use Tailwind CSS?</td>
+                    <td class="py-3 px-6 text-center">Rahul (Author)</td>
+                    <td class="py-3 px-6 text-center">
+                        <span class="bg-yellow-200 text-yellow-600 py-1 px-3 rounded-full text-xs">Draft</span>
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        <div class="flex item-center justify-center">
+                            <a href="#" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"><i class="fas fa-edit"></i></a>
+                            <a href="#" class="w-4 mr-2 transform hover:text-red-500 hover:scale-110"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Loop End -->
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

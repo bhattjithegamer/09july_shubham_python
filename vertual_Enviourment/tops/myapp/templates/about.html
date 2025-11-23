@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "base.html" %}
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen flex justify-center items-center p-6">
+    <div class="bg-white p-10 rounded-2xl shadow-xl max-w-3xl w-full">
+        <h1 class="text-4xl font-bold text-blue-600 mb-4 text-center">About Us</h1>
+        <p class="text-gray-700 text-lg leading-7">
+            Welcome to our platform!  
+            We aim to provide a seamless experience where users can create, share, and explore amazing content.
+            Our mission is to empower creativity and help people express their ideas freely.
+        </p>
+
+        <p class="text-gray-700 text-lg mt-4 leading-7">
+            We believe in simplicity, speed, and modern web design values.
+            Our team works hard to ensure that the website remains user-friendly and powerful.
+        </p>
+
+        <div class="mt-6 text-center">
+            <a href="/" class="text-blue-600 hover:underline text-lg">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</body>
+</html>

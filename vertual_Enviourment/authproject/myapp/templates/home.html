@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between p-6 bg-white/10 backdrop-blur-lg shadow-md">
+        <h1 class="text-2xl font-bold tracking-wide">MyWebsite</h1>
+        <div class="space-x-6 hidden md:block">
+            <a href="#" class="hover:text-gray-200 font-medium">Home</a>
+            <a href="#" class="hover:text-gray-200 font-medium">About</a>
+            <a href="#" class="hover:text-gray-200 font-medium">Services</a>
+            <a href="#" class="hover:text-gray-200 font-medium">Contact</a>
+        </div>
+        {% if user is none %}
+        <a href="/"
+            class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300">
+            Login
+        </a>
+        {% else %}
+        <a href="/userlogout"
+            class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300">
+            Logout
+        </a>
+        {% endif %}
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="flex flex-col items-center justify-center text-center py-20 px-6">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">Welcome, <span class="text-yellow-300">{{user}}</span> 🚀
+        </h2>
+        <p class="text-lg md:text-xl text-white/90 max-w-2xl mb-8">
+            Your one-stop platform to explore modern web technologies, learn coding, and grow your skills.
+        </p>
+        <a href="#features"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300">
+            Explore Now
+        </a>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white/10 backdrop-blur-md rounded-t-3xl shadow-inner">
+        <div class="max-w-6xl mx-auto px-6 grid gap-10 md:grid-cols-3 text-center">
+
+            <div class="p-6 bg-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl mb-4">💻</div>
+                <h3 class="text-2xl font-semibold mb-2">Learn Programming</h3>
+                <p class="text-white/80">Master coding skills through structured courses and hands-on practice.</p>
+            </div>
+
+            <div class="p-6 bg-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl mb-4">⚡</div>
+                <h3 class="text-2xl font-semibold mb-2">Stay Updated</h3>
+                <p class="text-white/80">Keep up with trending technologies and stay ahead in your IT journey.</p>
+            </div>
+
+            <div class="p-6 bg-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl mb-4">🌍</div>
+                <h3 class="text-2xl font-semibold mb-2">Join Community</h3>
+                <p class="text-white/80">Connect with like-minded learners and grow together as a tech community.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-16 py-6 text-center text-white/80 text-sm bg-white/10">
+        © 2025 MyWebsite — Built with ❤️ using Tailwind CSS
+    </footer>
+
+</body>
+
+</html>

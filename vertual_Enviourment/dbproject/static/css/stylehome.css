@@ -1,0 +1,249 @@
+:root {
+  --primary: #2563eb;
+  --dark: #0f172a;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  background: #f7fafc;
+  color: var(--dark);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e6eef8;
+  box-shadow: 0 2px 6px rgba(19, 38, 92, 0.03);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--primary), #06b6d4);
+  border-radius: 8px;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.site-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.tagline {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--dark);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.nav-links a:hover {
+  background: #f1f7ff;
+  color: var(--primary);
+}
+
+.actions .btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #e6eef8;
+  color: var(--dark);
+}
+
+/* Mobile */
+.hamburger {
+  display: none;
+  background: none;
+  font-size: 22px;
+  border: 0;
+}
+
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* Hero */
+.hero {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.05);
+}
+
+.hero h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: var(--muted);
+}
+
+.card-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+}
+
+
+.card {
+  padding: 20px;
+  width: 330px;
+  min-height: 370px;
+  border-radius: 20px;
+  background: #e8e8e8;
+  box-shadow: 5px 5px 6px #dadada,
+               -5px -5px 6px #f6f6f6;
+  transition: 0.4s;
+}
+
+.card:hover {
+  translate: 0 -10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e54a7;
+  margin: 15px 0 0 10px;
+}
+
+.card-image {
+  min-height: 170px;
+  border-radius: 15px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-body {
+  margin: 13px 0 0 10px;
+  color: rgb(31, 31, 31);
+  font-size: 15px;
+}
+
+.footer {
+  float: right;
+  margin: 28px 0 0 18px;
+  font-size: 13px;
+  color: #636363;
+}
+
+.by-name {
+  font-weight: 700;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 10px 5px 10px;
+}
+
+.btn-add, .btn-buy {
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.btn-add {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-add:hover {
+  background: #1d4ed8;
+}
+
+.btn-buy {
+  background: #16a34a;
+  color: #fff;
+}
+
+.btn-buy:hover {
+  background: #15803d;
+}
+
+.msg {
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 10px auto;
+    width: 90%;
+}
+
+.msg.success {
+    color: #0a8a0a;
+    background: #d8ffd8;
+}
+
+.msg.error, 
+.msg.danger {
+    color: #b30000;
+    background: #ffd6d6;
+}
+

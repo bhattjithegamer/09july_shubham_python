@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen flex justify-center items-center p-6">
+    <div class="bg-white p-10 rounded-2xl shadow-xl max-w-lg w-full">
+        <h1 class="text-4xl font-bold text-blue-600 mb-6 text-center">Contact Us</h1>
+
+        <form>
+            <label class="block mb-2 font-medium">Your Name</label>
+            <input type="text" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter your name">
+
+            <label class="block mb-2 font-medium">Email</label>
+            <input type="email" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Enter your email">
+
+            <label class="block mb-2 font-medium">Message</label>
+            <textarea rows="4" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" placeholder="Write your message"></textarea>
+
+            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Send Message</button>
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="/" class="text-blue-600 hover:underline text-lg">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</body>
+</html>
