@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX CRUD</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Add Student</h2>
+<input type="text" id="name" placeholder="Name">
+<input type="email" id="email" placeholder="Email">
+<button id="addBtn">Add</button>
+
+<hr>
+
+<h2>Student List</h2>
+<table border="1" width="50%">
+    <thead>
+        <tr>
+            <th>ID</th><th>Name</th><th>Email</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="studentTable">
+        {% for s in students %}
+        <tr id="row-{{ s.id }}">
+            <td>{{ s.id }}</td>
+            <td class="name">{{ s.name }}</td>
+            <td class="email">{{ s.email }}</td>
+            <td>
+                <button class="editBtn" data-id="{{ s.id }}">Edit</button>
+                <button class="deleteBtn" data-id="{{ s.id }}">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+$('#addBtn').click(function() {
+    $.ajax({
+        url: "/add-student/",
+        method: "POST",
+        data: {
+            name: $('#name').val(),
+            email: $('#email').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(data) {
+            $("#studentTable").append(`
+                <tr id="row-${data.id}">
+                    <td>${data.id}</td>
+                    <td class="name">${data.name}</td>
+                    <td class="email">${data.email}</td>
+                    <td>
+                        <button class="editBtn" data-id="${data.id}">Edit</button>
+                        <button class="deleteBtn" data-id="${data.id}">Delete</button>
+                    </td>
+                </tr>
+            `);
+        }
+    });
+});
+
+// DELETE
+$(document).on('click', '.deleteBtn', function() {
+    let id = $(this).data('id');
+
+    $.ajax({
+        url: `/delete-student/${id}/`,
+        success: function() {
+            $(`#row-${id}`).remove();
+        }
+    });
+});
+
+// UPDATE
+$(document).on('click', '.editBtn', function() {
+
+    let id = $(this).data('id');
+    let name = $(`#row-${id} .name`).text();
+    let email = $(`#row-${id} .email`).text();
+
+    let newName = prompt("Edit Name", name);
+    let newEmail = prompt("Edit Email", email);
+
+    $.ajax({
+        url: `/update-student/${id}/`,
+        method: "POST",
+        data: {
+            name: newName,
+            email: newEmail,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(data) {
+            $(`#row-${id} .name`).text(data.name);
+            $(`#row-${id} .email`).text(data.email);
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Form Validation</title>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+        .container {
+            background: white;
+            width: 400px;
+            padding: 25px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .error {
+            color: red;
+            margin: 5px 0;
+            display: none;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+        button {
+            padding: 12px 20px;
+            background: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h2>Registration Form</h2>
+
+        <form id="myForm" onsubmit="return validateForm()">
+
+            <label>Name:</label>
+            <input type="text" id="name">
+            <p class="error" id="nameError">Name is required*</p>
+
+            <label>Email:</label>
+            <input type="text" id="email">
+            <p class="error" id="emailError">Enter a valid email*</p>
+
+            <label>Password:</label>
+            <input type="password" id="password">
+            <p class="error" id="passwordError">Password must be 6+ characters*</p>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
