@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - WriteSphere{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Welcome to WriteSphere</h1>
+    {% if not request.session.email %}
+    <h2>
+      Note:-
+      <p class="lead" style="color: red">
+        You will have to register and then login so you can create posts.
+      </p>
+    </h2>
+    {% endif %}
+  </div>
+
+  {% if request.session.email %}
+  <a href="{% url 'create_post' %}" class="btn btn-success btn-lg">
+    + Create Post
+  </a>
+  {% endif %}
+</div>
+
+{% if msg %}
+<div class="alert alert-danger mt-3">{{ msg }}</div>
+{% endif %}
+
+<h3>Recent Blogs</h3>
+
+<div class="row">
+  {% for post in posts %}
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+
+      {% if post.img %}
+      <img src="{{ post.img.url }}" class="card-img-top" />
+      {% else %}
+      <img
+        src="https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d"
+        class="card-img-top"
+      />
+      {% endif %}
+
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content|slice:":120" }}...</p>
+
+        <!-- (NO REMOVE) Keeping original Read More btn -->
+        <a href="{% url 'detail_post' post.id %}" class="btn btn-primary btn-sm">Read More</a>
+      </div>
+
+     <div class="card-footer d-flex justify-content-between align-items-center">
+  <small class="text-muted">
+    By {{ post.author }} <br />
+    {{ post.created_at }}
+  </small>
+
+  <div class="d-flex gap-2">
+    <a href="{% url 'like_post' post.id %}" class="btn btn-outline-danger btn-sm">
+      ❤️{{ post.likes_count }}
+    </a>
+
+    <a
+      href="{% url 'detail_post' post.id %}#comments"
+      class="btn btn-outline-secondary btn-sm"
+    >
+      💬{{ post.comments_count }}
+    </a>
+  </div>
+{% if request.session.email == post.author.email %}
+  <div>
+    <a href="{% url 'update' post.id %}" class="btn btn-warning btn-sm">
+      Update
+    </a>
+    <a href="{% url 'delete' post.id %}" class="btn btn-danger btn-sm">
+      Delete
+    </a>
+  </div>
+        {% endif %}
+
+</div>
+
+
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
