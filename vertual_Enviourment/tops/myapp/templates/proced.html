@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+{% block title %}Proceed to Checkout{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-10">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- LEFT: SHIPPING & PAYMENT -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow p-6">
+          <h2 class="text-2xl font-semibold mb-4">Shipping Details</h2>
+          {% if messages %}
+            {% for message in messages %}
+    <div class="
+        px-4 py-3 rounded-lg mb-4 
+        {% if 'error' in message.tags %}
+            bg-red-100 text-red-700
+        {% else %}
+            bg-green-100 text-green-700
+        {% endif %}
+    ">
+        {{ message }}
+    </div>
+{% endfor %}
+
+          {% endif %}
+          <form id="checkoutForm" method="post" novalidate>
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Full name</label>
+                <input name="full_name" id="full_name" value="" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Phone</label>
+                <input name="phone" id="phone" value="" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input name="email" id="email" type="email" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Postal Code</label>
+                <input name="postal_code" id="postal_code" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-1">Address line 1</label>
+                <input name="address_line1" id="address_line1" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-1">Address line 2 (optional)</label>
+                <input name="address_line2" id="address_line2" class="w-full px-3 py-2 border rounded-lg" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">City</label>
+                <input name="city" id="city" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">State</label>
+                <input name="state" id="state" class="w-full px-3 py-2 border rounded-lg" required />
+              </div>
+            </div>
+
+            <hr class="my-6" />
+
+            <h3 class="text-xl font-semibold mb-3">Payment Method</h3>
+            <div class="space-y-3">
+              <label class="flex items-center space-x-3">
+                <input type="radio" name="payment_method" value="COD" checked class="h-4 w-4" />
+                <span class="font-medium">Cash on Delivery (COD)</span>
+              </label>
+
+              <label class="flex items-center space-x-3">
+                <input type="radio" name="payment_method" value="UPI" class="h-4 w-4" />
+                <span class="font-medium">UPI</span>
+              </label>
+
+              <label class="flex items-center space-x-3">
+                <input type="radio" name="payment_method" value="CARD" class="h-4 w-4" />
+                <span class="font-medium">Card</span>
+              </label>
+            </div>
+
+            <div id="cardFields" class="mt-4 hidden">
+              <h4 class="font-medium mb-2">Card Details</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input id="card_number" placeholder="Card number" class="px-3 py-2 border rounded-lg" maxlength="19" />
+                <input id="card_name" placeholder="Name on card" class="px-3 py-2 border rounded-lg" />
+                <input id="card_expiry" placeholder="MM/YY" maxlength="5" class="px-3 py-2 border rounded-lg" />
+                <input id="card_cvv" placeholder="CVV" maxlength="4" class="px-3 py-2 border rounded-lg" />
+              </div>
+            </div>
+
+            <div id="upiField" class="mt-4 hidden">
+              <h4 class="font-medium mb-2">UPI ID</h4>
+              <input id="upi_id" name="upi_id" placeholder="example@bank" class="w-full px-3 py-2 border rounded-lg" />
+            </div>
+
+            <div class="mt-6 flex items-center justify-between">
+              <div class="text-sm text-gray-600">Have a coupon?</div>
+              <div class="flex items-center space-x-2">
+                <input id="couponCode" placeholder="COUPON10" class="px-3 py-2 border rounded-lg" />
+                <button type="button" id="applyCoupon" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Apply</button>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button type="submit" id="placeOrderBtn" class="w-full bg-green-600 text-white py-3 rounded-lg text-lg font-semibold">
+                Place Order — Pay ₹<span id="finalTotalClient">{{ total|floatformat:2 }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div>
+        <div class="bg-white rounded-2xl shadow p-6 sticky top-6">
+          <h3 class="text-2xl font-semibold mb-4">Order Summary</h3>
+
+          <div id="cartList" class="space-y-4">
+            {% for it in cart_items %}
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center text-sm font-medium">
+                    {{ it.qty }}
+                  </div>
+                  <div>
+                    <div class="font-medium">{{ it.name }}</div>
+                    <div class="text-sm text-gray-500">₹{{ it.price|floatformat:2 }} each</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="font-semibold">₹<span class="line-total">{{ it.line|floatformat:2 }}</span></div>
+                  <div class="mt-1 text-xs text-gray-500">Qty:
+                    <button class="qty-btn px-2 py-0.5 border rounded-l" data-slug="{{ it.slug }}" data-action="dec">-</button>
+                    <input class="w-10 inline-block text-center border-t border-b qty-input" data-slug="{{ it.slug }}" value="{{ it.qty }}" />
+                    <button class="qty-btn px-2 py-0.5 border rounded-r" data-slug="{{ it.slug }}" data-action="inc">+</button>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <p class="text-gray-500">Cart is empty.</p>
+            {% endfor %}
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹<span id="subtotalClient">{{ subtotal|floatformat:2 }}</span></span>
+            </div>
+            <div class="flex justify-between">
+              <span>Shipping</span>
+              <span>₹<span id="shippingClient">{{ shipping|floatformat:2 }}</span></span>
+            </div>
+            <div class="flex justify-between">
+              <span>Discount</span>
+              <span>-₹<span id="discountClient">{{ discount|floatformat:2 }}</span></span>
+            </div>
+            <div class="flex justify-between font-semibold text-lg pt-2">
+              <span>Total</span>
+              <span>₹<span id="totalClient">{{ total|floatformat:2 }}</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for confirmation (simple) -->
+<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-11/12 max-w-md">
+    <h4 class="text-xl font-semibold mb-3">Confirm Order</h4>
+    <p class="text-sm text-gray-700 mb-4">Are you sure you want to place the order? Payment will be processed as per selected method.</p>
+    <div class="flex justify-end space-x-3">
+      <button id="cancelModal" class="px-4 py-2 border rounded">Cancel</button>
+      <button id="confirmModalBtn" class="px-4 py-2 bg-green-600 text-white rounded">Yes, Place Order</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Client-side behavior: show/hide payment fields
+  document.querySelectorAll('input[name="payment_method"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      document.getElementById('cardFields').classList.toggle('hidden', this.value !== 'CARD');
+      document.getElementById('upiField').classList.toggle('hidden', this.value !== 'UPI');
+    });
+  });
+
+  // Quantity buttons (client-side only). For real app, update session via AJAX.
+  document.querySelectorAll('.qty-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e){
+      var action = this.dataset.action;
+      var slug = this.dataset.slug;
+      var input = document.querySelector('.qty-input[data-slug="'+slug+'"]');
+      var val = parseInt(input.value) || 1;
+      if(action === 'inc') val++;
+      else if(action === 'dec' && val > 1) val--;
+      input.value = val;
+      updateTotalsClientSide();
+    });
+  });
+
+  document.querySelectorAll('.qty-input').forEach(function(inp){
+    inp.addEventListener('change', function(){
+      if(parseInt(this.value) < 1) this.value = 1;
+      updateTotalsClientSide();
+    });
+  });
+
+  function parseMoney(v){ return parseFloat(v||0); }
+
+  function updateTotalsClientSide(){
+    // recalc line totals from DOM
+    var lines = document.querySelectorAll('#cartList .line-total');
+    var subtotal = 0;
+    lines.forEach(function(lt, idx){
+      // get corresponding qty and unit price from the DOM
+      var parent = lt.closest('.flex.items-center') || lt.closest('div');
+      // simpler: we can read price text sibling
+    });
+
+    // easier: compute from each cart item block
+    subtotal = 0;
+    document.querySelectorAll('#cartList > div').forEach(function(block){
+      var priceText = block.querySelector('.text-sm.text-gray-500')?.innerText || '';
+      // price text like "₹123.00 each"
+      var m = priceText.match(/₹([\d.,]+)/);
+      var price = m ? parseFloat(m[1].replace(/,/g,'')) : 0;
+      var qtyInput = block.querySelector('.qty-input');
+      var qty = qtyInput ? parseInt(qtyInput.value) : 1;
+      var line = price * qty;
+      var lineNode = block.querySelector('.line-total');
+      if(lineNode) lineNode.innerText = line.toFixed(2);
+      subtotal += line;
+    });
+
+    var shipping = parseMoney(document.getElementById('shippingClient').innerText) || 0;
+    var discount = parseMoney(document.getElementById('discountClient').innerText) || 0;
+    var total = subtotal + shipping - discount;
+
+    document.getElementById('subtotalClient').innerText = subtotal.toFixed(2);
+    document.getElementById('totalClient').innerText = total.toFixed(2);
+    document.getElementById('finalTotalClient').innerText = total.toFixed(2);
+  }
+
+  // coupon apply (demo)
+  document.getElementById('applyCoupon').addEventListener('click', function(){
+    var code = document.getElementById('couponCode').value.trim();
+    if(!code){ alert('Enter coupon code'); return; }
+    // demo only: COUPON10 => 10% off
+    if(code.toUpperCase() === 'COUPON10'){
+      var subtotal = parseFloat(document.getElementById('subtotalClient').innerText);
+      var discount = (subtotal * 0.10);
+      document.getElementById('discountClient').innerText = discount.toFixed(2);
+      updateTotalsClientSide();
+      alert('Coupon applied: 10% off');
+    } else {
+      alert('Invalid coupon');
+    }
+  });
+
+  // form submit -> show confirm modal
+  document.getElementById('checkoutForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    // basic client-side validation
+    var required = ['full_name','phone','email','address_line1','city','postal_code'];
+    for(var i=0;i<required.length;i++){
+      var el = document.getElementById(required[i]);
+      if(!el || !el.value.trim()){
+        alert('Please fill ' + required[i].replace('_',' '));
+        el.focus();
+        return;
+      }
+    }
+
+    // If card selected, do simple card validation
+    var pm = document.querySelector('input[name="payment_method"]:checked').value;
+    if(pm === 'CARD'){
+      var cn = document.getElementById('card_number').value.replace(/\s+/g,'');
+      if(cn.length < 12){ alert('Enter valid card number'); return; }
+    }
+
+    // show modal
+    document.getElementById('confirmModal').classList.remove('hidden');
+    document.getElementById('confirmModal').classList.add('flex');
+  });
+
+  document.getElementById('cancelModal').addEventListener('click', function(){
+    document.getElementById('confirmModal').classList.add('hidden');
+    document.getElementById('confirmModal').classList.remove('flex');
+  });
+
+  document.getElementById('confirmModalBtn').addEventListener('click', function(){
+    // on confirm: submit the form for real
+    document.getElementById('confirmModal').classList.add('hidden');
+    document.getElementById('confirmModal').classList.remove('flex');
+    // For real payment gateway, redirect to payment processor here.
+    document.getElementById('checkoutForm').submit();
+  });
+
+  // init
+  updateTotalsClientSide();
+</script>
+{% endblock %}

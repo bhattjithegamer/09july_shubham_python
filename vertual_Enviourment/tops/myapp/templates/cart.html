@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto py-10 px-4" id="cart-section">
+  <h2 class="text-3xl font-bold mb-8 text-gray-800">Shopping Cart</h2>
+
+  {% if cart %}
+  <div class="space-y-6">
+    {% for id, i in cart.items %}
+    <!-- Product Card -->
+    <div class="flex flex-col sm:flex-row items-center bg-white shadow-md rounded-2xl p-4 border border-gray-100 gap-4">
+      
+      <!-- Product Image -->
+      <div class="flex-shrink-0">
+        {% if i.image %}
+          <img src="{{ i.image }}" class="w-24 h-24 rounded-xl object-cover border border-gray-200">
+        {% else %}
+          <div class="w-24 h-24 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500 text-xs">No Img</div>
+        {% endif %}
+      </div>
+
+      <!-- Product Details -->
+      <div class="flex-1 text-center sm:text-left">
+        <h3 class="font-bold text-lg text-gray-900">{{ i.name }}</h3>
+        <p class="text-gray-500 text-sm">Price: ${{ i.price }}</p>
+      </div>
+
+      <!-- Quantity Adjuster (+ / - Buttons) -->
+      <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+        
+        <!-- Decrease Button (-) -->
+        <a href="{% url 'decrease_cart' id %}" 
+           class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition">
+           −
+        </a>
+
+        <!-- Quantity Display -->
+        <span class="px-4 py-2 bg-white text-gray-800 font-semibold text-sm min-w-[40px] text-center">
+            {{ i.qty }}
+        </span>
+
+        <!-- Increase Button (+) -->
+        <a href="{% url 'increase_cart' id %}" 
+           class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition">
+           +
+        </a>
+      </div>
+
+      <!-- Total Price for Item -->
+      <div class="font-bold text-lg text-gray-800 w-24 text-center">
+        ${{ i.my_total }}
+      </div>
+
+      <!-- Remove Button (Cross Icon) -->
+      <a href="{% url 'remove_cart' id %}" 
+         class="p-2 text-gray-400 hover:text-red-600 transition" title="Remove Item">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+      </a>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Cart Footer (Total & Checkout) -->
+  <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+      <div class="flex justify-between items-center mb-6">
+          <span class="text-gray-600 text-lg">Subtotal</span>
+          <span class="text-2xl font-bold text-gray-900">${{ total }}</span>
+      </div>
+      
+      <div class="text-right">
+          <a href="/proced" class="inline-block px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition transform hover:-translate-y-1">
+            Proceed to Checkout
+          </a>
+      </div>
+  </div>
+
+  {% else %}
+  <!-- Empty Cart State -->
+  <div class="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
+      <div class="text-6xl mb-4">🛒</div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h3>
+      <p class="text-gray-500 mb-6">Looks like you haven't added anything yet.</p>
+      <a href="/" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        Continue Shopping
+      </a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

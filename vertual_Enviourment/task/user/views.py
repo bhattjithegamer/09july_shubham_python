@@ -2,11 +2,16 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.db.models import Count 
 
 
 def home(request):
     msg = request.GET.get('msg', '')
-    posts = post.objects.all()
+    posts = post.objects.annotate(
+        likes_count=Count('like', distinct=True),
+        comments_count=Count('comment', distinct=True)
+    ).order_by('-id') # Optional: orders by newest first
+
     return render(request, 'home.html', {'posts': posts, 'msg': msg})
 
 def about(request):
@@ -86,8 +91,12 @@ def delete(request, id):
    return redirect('home')
 
 def detail_post(request, id):
-    post_obj = post.objects.get(id=id)
+    post_obj = post.objects.annotate(
+        likes_count=Count('like', distinct=True)
+    ).get(id=id)
+
     comments = Comment.objects.filter(post=post_obj)
+    comments_count = comments.count()
 
     user_email = request.session.get('email')
     user = None
@@ -97,6 +106,7 @@ def detail_post(request, id):
     return render(request, 'detail.html', {
         'post': post_obj,
         'comments': comments,
+        'comments_count': comments_count,
         'user': user
     })
 
@@ -115,7 +125,7 @@ def like_post(request, id):
     else:
         Like.objects.create(user=user, post=post_obj)
 
-    return redirect('detail_post', id=id)
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
 def comment_post(request, id):

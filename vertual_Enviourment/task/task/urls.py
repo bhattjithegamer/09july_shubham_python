@@ -23,4 +23,5 @@ urlpatterns = [
  
     path('', include('user.urls')),
     path('adminapp/', include('adminapp.urls')),
+
 ]

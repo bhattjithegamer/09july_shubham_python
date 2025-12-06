@@ -50,7 +50,7 @@
         <p class="card-text">{{ post.content|slice:":120" }}...</p>
 
         <!-- (NO REMOVE) Keeping original Read More btn -->
-        <a href="#" class="btn btn-primary btn-sm">Read More</a>
+        <a href="{% url 'detail_post' post.id %}" class="btn btn-primary btn-sm">Read More</a>
       </div>
 
      <div class="card-footer d-flex justify-content-between align-items-center">
@@ -60,7 +60,7 @@
   </small>
 
   <div class="d-flex gap-2">
-    <a href="#" class="btn btn-outline-danger btn-sm">
+    <a href="{% url 'like_post' post.id %}" class="btn btn-outline-danger btn-sm">
       ❤️{{ post.likes_count }}
     </a>
 
@@ -71,7 +71,7 @@
       💬{{ post.comments_count }}
     </a>
   </div>
-
+{% if request.session.email == post.author.email %}
   <div>
     <a href="{% url 'update' post.id %}" class="btn btn-warning btn-sm">
       Update
@@ -80,6 +80,8 @@
       Delete
     </a>
   </div>
+        {% endif %}
+
 </div>
 
 

@@ -1,0 +1,48 @@
+{% extends 'baseadmin.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
+    
+    <div class="px-6 py-4">
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="text-indigo-600 hover:text-indigo-800 mb-4 inline-block font-bold">
+            &larr; Back to Posts
+        </a>
+
+        <!-- Title -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            {{ post.title }}
+        </h1>
+
+        <!-- Author and Date -->
+        <div class="flex items-center text-gray-600 text-sm mb-6">
+            <span class="mr-2">By <span class="font-bold text-indigo-600">{{ post.author.email }}</span></span>
+            <span>| ID: {{ post.id }}</span>
+        </div>
+
+        <!-- Image -->
+        {% if post.image %}
+        <div class="mb-6">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-96 object-cover rounded-lg shadow-md">
+        </div>
+        {% endif %}
+
+        <!-- Content / Description -->
+        <div class="text-gray-700 text-lg leading-relaxed">
+            <!-- જો તમારા મોડેલમાં content કે description ફિલ્ડ હોય તો તે અહીં લખો -->
+            {{ post.content|linebreaks }} 
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="px-6 py-4 bg-gray-100 border-t border-gray-200 flex justify-end">
+        <a href="{% url 'update' post.id %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+            Edit
+        </a>
+        <a href="{% url 'delete' post.id %}" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" onclick="return confirm('Are you sure?');">
+            Delete
+        </a>
+    </div>
+
+</div>
+{% endblock %}

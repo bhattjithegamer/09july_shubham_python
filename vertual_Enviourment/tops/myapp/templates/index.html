@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    {% extends "base.html" %}
+ {% extends "base.html" %}
     {% load static %}
 {% block title %}Home{% endblock %}
 
-{% if ms %}
-<p class="text-red-500 mb-4 text-center">{{ ms }}</p>
-{% endif %}
+  {% block content %}
 
-{% block content %}
     <!-- HERO SECTION -->
     <section class="text-center py-20 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
         <h2 class="text-4xl font-bold mb-4">Welcome to Our Website</h2>
@@ -47,17 +35,24 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     <!-- Card 1 -->
+     {% for i in products %}
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-200">
       <div class="relative">
-        <img src="/static/img/user/img23.jpg" alt="Product 1" class="w-full h-56 object-cover">
+
+        {% if i.image %}
+        <img src="{{ i.image.url }}" alt="{{ i.name }}" class="w-full h-56 object-cover">
+        {% else %}
+         <div class="w-full h-56 bg-gray-200 flex items-center justify-center">No Image</div>
+        {% endif %}
+
         <div class="absolute top-3 left-3 bg-white/80 text-sm px-2 py-1 rounded-full font-medium">New</div>
       </div>
       <div class="p-5">
-        <h3 class="text-lg font-semibold mb-2">Stylish Sneakers</h3>
-        <p class="text-gray-600 text-sm mb-4">Comfortable and durable sneakers for everyday wear. Breathable upper and cushioned sole.</p>
+        <h3 class="text-lg font-semibold mb-2">{{ i.name }}</h3>
+        <p class="text-gray-600 text-sm mb-4">{{ i.description }}...</p>
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-xl font-bold">$59.99</div>
+            <div class="text-xl font-bold">${{ i.price }}</div>
             <div class="text-sm text-gray-500">Incl. taxes</div>
           </div>
           <div class="flex items-center gap-1">
@@ -73,384 +68,17 @@
           </div>
         </div>
 
-        <div class="mt-4 flex gap-3">
-          <button class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:shadow-sm transition">Add to cart</button>
-          <button class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Buy now</button>
+          <div class="mt-4 flex gap-3">
+          <!-- CHANGED: Add to Cart Link -->
+            <a href="{% url 'add_to_cart' i.id %}" class="flex-1 text-center px-4 py-2 border border-gray-200 rounded-lg hover:shadow-sm hover:bg-gray-50 transition cursor-pointer">
+              Add to cart
+            </a>
+          <a href="{% url 'proced' %}" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Buy now</a>
         </div>
       </div>
     </div>
-
-    <!-- Card 2 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-200">
-      <div class="relative">
-        <img src="/static/img/user/img22.jpg" alt="Product 2" class="w-full h-56 object-cover">
-        <div class="absolute top-3 right-3 bg-white/80 text-sm px-2 py-1 rounded-full font-medium">20% off</div>
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold mb-2">Wireless Headphones</h3>
-        <p class="text-gray-600 text-sm mb-4">Noise-cancelling, long battery life, and crystal-clear sound for music and calls.</p>
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-xl font-bold">$89.00</div>
-            <div class="text-sm text-gray-500 line-through">$110.00</div>
-          </div>
-          <div class="text-sm text-gray-500">★★★★★</div>
-        </div>
-
-        <div class="mt-4 flex gap-3">
-          <button class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:shadow-sm transition">Add to cart</button>
-          <button class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-200">
-      <div class="relative">
-        <img src="/static/img/user/img21.jpg" alt="Product 3" class="w-full h-56 object-cover">
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold mb-2">Classic Wristwatch</h3>
-        <p class="text-gray-600 text-sm mb-4">Elegant analog watch with leather strap — perfect for formal and casual occasions.</p>
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="text-xl font-bold">$129.00</div>
-            <div class="text-sm text-gray-500">Free shipping</div>
-          </div>
-          <div class="text-sm text-gray-500">In stock</div>
-        </div>
-
-        <div class="mt-4 flex gap-3">
-          <button class="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:shadow-sm transition">Add to cart</button>
-          <button class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 1: Smart Fitness Band -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative">
-        <img src="/static/img/user/img1.jpg" class="w-full h-56 object-cover">
-        <div class="absolute top-3 left-3 bg-white/80 px-2 py-1 rounded-full text-sm">New</div>
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Smart Fitness Band</h3>
-        <p class="text-gray-600 text-sm mb-3">Tracks steps, heart rate, sleep, calories and more.</p>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-xl font-bold">$39.99</div>
-                <div class="text-sm text-gray-500">Free Shipping</div>
-            </div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3">
-            <button class="flex-1 border rounded-lg py-2">Add to cart</button>
-            <button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2: Bluetooth Portable Speaker -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative">
-        <img src="/static/img/user/img2.jpg" class="w-full h-56 object-cover">
-        <div class="absolute top-3 right-3 bg-white/80 px-2 py-1 rounded-full text-sm">Best Seller</div>
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Bluetooth Portable Speaker</h3>
-        <p class="text-gray-600 text-sm mb-3">Loud, deep bass and long battery backup.</p>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-xl font-bold">$55.00</div>
-                <div class="text-sm text-gray-500">Incl. GST</div>
-            </div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3">
-            <button class="flex-1 border rounded-lg py-2">Add to cart</button>
-            <button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3: Gaming Mechanical Keyboard -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative">
-        <img src="/static/img/user/img4.jpg" class="w-full h-56 object-cover">
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Gaming Mechanical Keyboard</h3>
-        <p class="text-gray-600 text-sm mb-3">RGB lighting and high-speed switches.</p>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-xl font-bold">$79.00</div>
-                <div class="text-sm text-gray-500">2-Year Warranty</div>
-            </div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3">
-            <button class="flex-1 border rounded-lg py-2">Add to cart</button>
-            <button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4: Wireless Gaming Mouse -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative">
-        <img src="/static/img/user/img3.jpg" class="w-full h-56 object-cover">
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Wireless Gaming Mouse</h3>
-        <p class="text-gray-600 text-sm mb-3">Adjustable DPI & ultra-fast response.</p>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-xl font-bold">$49.99</div>
-                <div class="text-sm text-gray-500">Limited Stock</div>
-            </div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3">
-            <button class="flex-1 border rounded-lg py-2">Add to cart</button>
-            <button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5: Leather Travel Backpack -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative">
-        <img src="/static/img/user/img5.jpg" class="w-full h-56 object-cover">
-      </div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Leather Travel Backpack</h3>
-        <p class="text-gray-600 text-sm mb-3">Premium quality with multiple pockets.</p>
-        <div class="flex justify-between items-center">
-            <div>
-                <div class="text-xl font-bold">$95.50</div>
-                <div class="text-sm text-gray-500">Durable Material</div>
-            </div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3">
-            <button class="flex-1 border rounded-lg py-2">Add to cart</button>
-            <button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img6.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Men’s Casual Sports Shoes</h3>
-        <p class="text-gray-600 text-sm mb-3">Soft inner cushioning & durable sole.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$45.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 7 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img7.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Women’s Stylish Handbag</h3>
-        <p class="text-gray-600 text-sm mb-3">Trendy, lightweight, premium finish.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$39.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 8 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img25.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Wooden Study Table</h3>
-        <p class="text-gray-600 text-sm mb-3">Sturdy, smooth finish, modern look.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$150.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 9 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img8.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">LED Desk Lamp</h3>
-        <p class="text-gray-600 text-sm mb-3">Adjustable brightness & touch control.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$22.99</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 10 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img9.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Noise Cancelling Earbuds</h3>
-        <p class="text-gray-600 text-sm mb-3">Deep bass & long-lasting battery.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$65.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 11 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img10.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Stainless Steel Water Bottle</h3>
-        <p class="text-gray-600 text-sm mb-3">Keeps water cold for 24 hours.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$12.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 12 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img15.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">DSLR Camera Lens 50mm</h3>
-        <p class="text-gray-600 text-sm mb-3">Perfect for portraits & low light shots.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$199.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 13 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img12.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Power Bank 20000mAh</h3>
-        <p class="text-gray-600 text-sm mb-3">Fast charging with dual USB ports.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$29.99</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 14 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img14.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Smart Home Security Camera</h3>
-        <p class="text-gray-600 text-sm mb-3">1080p video recording & night vision.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$75.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 15 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img13.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Mini Portable Fan</h3>
-        <p class="text-gray-600 text-sm mb-3">Rechargeable & super lightweight.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$10.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 16 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img24.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Cotton T-Shirt (White)</h3>
-        <p class="text-gray-600 text-sm mb-3">Soft, breathable & premium material.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$15.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 17 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img17.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Winter Hooded Jacket</h3>
-        <p class="text-gray-600 text-sm mb-3">Warm & stylish winter wear.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$45.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 18 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img18.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Coffee Maker Machine</h3>
-        <p class="text-gray-600 text-sm mb-3">Brews rich aromatic coffee instantly.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$89.99</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 19 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img19.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Laptop Cooling Pad</h3>
-        <p class="text-gray-600 text-sm mb-3">High-speed fans keep laptop cool.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$24.99</div></div>
-            <div class="text-sm text-yellow-500">★★★★☆</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-    <!-- 20 -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:-translate-y-2 transition">
-      <div class="relative"><img src="/static/img/user/img20.jpg" class="w-full h-56 object-cover"></div>
-      <div class="p-5">
-        <h3 class="text-lg font-semibold">Baby Soft Blanket</h3>
-        <p class="text-gray-600 text-sm mb-3">Super soft & skin-friendly fabric.</p>
-        <div class="flex justify-between items-center">
-            <div><div class="text-xl font-bold">$18.00</div></div>
-            <div class="text-sm text-yellow-500">★★★★★</div>
-        </div>
-        <div class="mt-4 flex gap-3"><button class="flex-1 border rounded-lg py-2">Add to cart</button><button class="flex-1 bg-blue-600 text-white rounded-lg py-2">Buy now</button></div>
-      </div>
-    </div>
-
-</div>
-
+{% endfor %}
+  </div>
 </section>
     <!-- all product end-->
 

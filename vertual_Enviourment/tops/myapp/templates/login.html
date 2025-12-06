@@ -12,6 +12,9 @@
 <div class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
 <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
 <h2 class="text-3xl font-bold text-center mb-6 text-blue-600">Login</h2>
+{% if ms %}
+<p class="text-red-500 mb-4 text-center">{{ ms }}</p>
+{% endif %}
 
 <form method="post">
 {% csrf_token %}

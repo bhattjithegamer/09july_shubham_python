@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-900 min-h-screen flex text-white">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 border-r border-gray-700 hidden md:block">
+      <div class="p-6">
+        <h2 class="text-xl font-semibold text-white">Admin Panel</h2>
+        <p class="text-sm text-gray-400 mt-1">Welcome, Admin</p>
+      </div>
+
+      <nav class="px-4 pb-6">
+        <ul class="space-y-1">
+          <li>
+            <a href="/adminapp/admin_dashboard"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+              <span class="w-5">🏠</span> <span>Dashboard</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/adminapp/admin_product"
+              class="flex items-center gap-3 p-3 rounded-lg bg-gray-700 text-white">
+              <span class="w-5">📦</span> <span>Products</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/adminapp/admin_notesdata"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+              <span class="w-5">🧾</span> <span>Notes</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/adminapp/admin_userdata"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+              <span class="w-5">👥</span> <span>Users</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/adminapp/adminlogout"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+              <span class="w-5">🚪</span> <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <header class="mb-6 text-center">
+        <h1 class="text-3xl font-bold">Add New Product</h1>
+        <p class="text-gray-400 text-sm mt-1">Fill the details to add a product</p>
+      </header>
+
+      <section class="bg-gray-800 p-6 rounded-xl shadow max-w-xl mx-auto border border-gray-700">
+
+        <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+          {% csrf_token %}
+
+          <!-- Name -->
+          <div>
+            <label class="block mb-1 text-gray-300">Product Name</label>
+            <input type="text" name="name"
+              class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-0"
+              placeholder="Enter product name" required />
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block mb-1 text-gray-300">Description</label>
+            <textarea name="description" rows="3"
+              class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-0"
+              placeholder="Enter product description" required></textarea>
+          </div>
+
+          <!-- Price -->
+          <div>
+            <label class="block mb-1 text-gray-300">Price (₹)</label>
+            <input type="number" name="price"
+              class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-0"
+              placeholder="Enter price" required />
+          </div>
+
+          <!-- Image Upload -->
+          <div>
+            <label class="block mb-1 text-gray-300">Product Image</label>
+            <input type="file" name="image"
+              class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-0"
+              required />
+          </div>
+
+          <!-- Save Button -->
+          <button type="submit"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg text-lg font-semibold transition">
+            Save Product
+          </button>
+
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

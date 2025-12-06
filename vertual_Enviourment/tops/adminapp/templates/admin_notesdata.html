@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-black text-gray-200 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 border-r border-gray-700 hidden md:block">
+      <div class="p-6">
+        <h2 class="text-xl font-semibold text-gray-100">Admin Panel</h2>
+        <p class="text-sm text-gray-400 mt-1">Welcome, Admin</p>
+      </div>
+
+      <nav class="px-4 pb-6">
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="/adminapp/admin_dashboard"
+              class="flex items-center gap-3 p-3 rounded-lg bg-gray-800 text-indigo-400"
+            >
+              <span class="w-5">🏠</span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/adminapp/admin_product"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800"
+            >
+              <span class="w-5">📦</span>
+              <span>Products</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/adminapp/admin_notesdata"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800"
+            >
+              <span class="w-5">🧾</span>
+              <span>Notes</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/adminapp/admin_userdata"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800"
+            >
+              <span class="w-5">👥</span>
+              <span>Users</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800"
+            >
+              <span class="w-5">⚙️</span>
+              <span>Settings</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/adminapp/adminlogout"
+              class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800"
+            >
+              <span class="w-5">🚪</span>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 p-8 text-gray-200">
+
+      <!-- Page Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-100">All Notes</h1>
+        <p class="text-gray-400 text-sm">List of uploaded notes</p>
+      </header>
+
+      <!-- Notes Card -->
+      <section class="max-w-6xl mx-auto bg-gray-900 p-6 rounded-xl shadow">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-100">Notes Information</h2>
+
+          <input
+            type="search"
+            placeholder="Search notes..."
+            class="rounded-full bg-gray-800 border border-gray-700 px-4 py-2 text-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          />
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-300">
+            <thead class="text-xs uppercase text-gray-400 bg-gray-800">
+              <tr>
+                <th class="px-4 py-3">ID</th>
+                <th class="px-4 py-3">Uploaded_at</th>
+                <th class="px-4 py-3">User</th>
+                <th class="px-4 py-3">Title</th>
+                <th class="px-4 py-3">Description</th>
+                <th class="px-4 py-3">Subject</th>
+                <th class="px-4 py-3">Files</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3">updated_at</th>
+                <th class="px-4 py-3 text-center">Action</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-700">
+              {% for i in ndata %}
+              <tr>
+                <td class="px-4 py-3">{{i.id}}</td>
+                <td class="px-4 py-3">{{i.uploaded_at}}</td>
+                <td class="px-4 py-3">{{i.user}}</td>
+                <td class="px-4 py-3">{{i.title}}</td>
+                <td class="px-4 py-3">{{i.desc}}</td>
+                <td class="px-4 py-3">{{i.subject}}</td>
+                <td class="py-3 text-indigo-600 underline cursor-pointer"><a
+                href="{{i.files.url}}">Files</a></td>
+                <td class="py-3 text-gray-600 font-semibold">{{i.status}}</td>
+                <td class="px-4 py-3">{{i.updated_at}}</td>
+
+                <td class="px-4 py-3 text-center">
+                  <a
+                  href="/adminapp/notes_approve/{{i.id}}"
+                    class="text-white bg-blue-600 px-3 py-1 rounded-md text-sm hover:bg-blue-700"
+                  >
+                    Approve
+                  </a>
+
+                  <a
+                  href="/adminapp/notes_reject/{{i.id}}"
+                    class="text-white bg-red-600 px-3 py-1 rounded-md text-sm ml-3 hover:bg-red-700"
+                  >
+                    Reject
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="mt-10 text-center text-xs text-gray-500">
+        &copy; <span id="year"></span> Your Company
+      </footer>
+
+    </div>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
