@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Find Artistry{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="max-w-6xl mx-auto flex justify-between">
+            <h1 class="font-bold text-xl">Find Artistry</h1>
+            <div class="space-x-4">
+                <a href="/" class="hover:underline">Home</a>
+                <a href="/manage_profile" class="hover:underline">Manage Profile</a>
+                <a href="/search_artist" class="hover:underline">Search Artist</a>
+                <a href="/book_artist" class="hover:underline">Book Artist</a>
+                <a href="/cancel_booking" class="hover:underline">Cancel Booking</a>
+                <a href="/feedback" class="hover:underline">Feedback</a>
+                <a href="/manage_booking" class="hover:underline">Manage Booking</a>
+                <a href="/login" class="hover:underline">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="max-w-6xl mx-auto p-6">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

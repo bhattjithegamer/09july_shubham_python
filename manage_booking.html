@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Booking{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-5 text-center">Your Bookings</h2>
+
+    <table class="w-full border">
+        <tr class="bg-gray-200">
+            <th class="border p-2">Booking ID</th>
+            <th class="border p-2">Artist</th>
+            <th class="border p-2">Date</th>
+            <th class="border p-2">Action</th>
+        </tr>
+
+        <tr>
+            <td class="border p-2">101</td>
+            <td class="border p-2">John Artist</td>
+            <td class="border p-2">2025-12-10</td>
+            <td class="border p-2">
+                <button class="bg-red-500 text-white px-3 py-1 rounded">Cancel</button>
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
