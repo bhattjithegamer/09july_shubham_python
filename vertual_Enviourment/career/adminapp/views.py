@@ -32,7 +32,8 @@ def approve_artist(request):
     return render(request,'approve_artist.html')
 
 def view_feedbacks(request):
-    return render(request,'view_feedbacks.html')
+    feedback=feedback_cls.objects.all()
+    return render(request,'view_feedbacks.html',{'feedback':feedback})
 
 def admin_dashboard(request):
     u=user_register.objects.all()

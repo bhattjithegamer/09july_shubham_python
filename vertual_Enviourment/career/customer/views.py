@@ -84,7 +84,21 @@ def cancel_booking(request):
     return render(request,'cancel_booking.html')
 
 def feedback(request):
-    return render(request,'feedback.html')
+    user_id = request.session.get('user_id')
+
+    if request.method == 'POST':
+        form=feedback_form(request.POST)
+
+        if form.is_valid():
+            
+            fb=form.save(commit=False)
+            fb.user=user_register.objects.get(id=user_id)
+            fb.save()
+            print("feedback sent")
+            return redirect('feedback')
+        else:
+            print(form.errors)
+    return render(request,'feedback.html',{'form': feedback_form()})
 
 def manage_booking(request):
     return render(request,'manage_booking.html')

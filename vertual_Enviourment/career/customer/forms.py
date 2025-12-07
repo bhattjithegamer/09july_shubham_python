@@ -11,3 +11,8 @@ class artist_booking_form(forms.ModelForm):
         model = book_artist_cls
         # user field ne exclude karo, kem ke e tame view ma session mathi lo cho
         exclude = ['user']
+
+class feedback_form(forms.ModelForm):
+    class Meta:
+        model = feedback_cls
+        fields = ['feedback']

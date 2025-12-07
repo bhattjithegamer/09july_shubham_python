@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 
@@ -16,3 +17,7 @@ class book_artist_cls(models.Model):
     date = models.DateField()
     location = models.CharField(max_length=100)
 
+class feedback_cls(models.Model):
+    user = models.ForeignKey(user_register, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
+    feedback=models.CharField()
