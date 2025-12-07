@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-blue-600 text-white p-4">
+    <div class="max-w-6xl mx-auto flex justify-between">
+        <h1 class="font-bold text-xl">Admin Dashboard</h1>
+        <div class="space-x-4">
+            <a href="/adminapp/admin_dashboard" class="hover:underline">Dashboard</a>
+            <a href="/adminapp/manage_users" class="hover:underline">Manage Users</a>
+            <a href="/adminapp/view_bookings" class="hover:underline">Bookings</a>
+            <a href="/adminapp/view_reviews" class="hover:underline">Reviews</a>
+            <a href="/adminapp/approve_artist" class="hover:underline">Approvals</a>
+            <a href="/adminapp/view_feedbacks" class="hover:underline">Feedbacks</a>
+            {% if user %}
+            <a href="/adminapp/logout" class="hover:underline">Logout</a>
+            {% else %}
+            <a href="/adminapp/admin_login" class="hover:underline">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-5xl mx-auto mt-10 bg-white shadow p-6 rounded">
+    <h2 class="text-2xl font-bold mb-4">All Bookings</h2>
+
+    <table class="w-full border">
+        <thead class="bg-blue-600 text-white">
+            <tr>
+                <th class="p-2 border">ID</th>
+                <th class="p-2 border">Customer</th>
+                <th class="p-2 border">Artist</th>
+                <th class="p-2 border">Date</th>
+                <th class="p-2 border">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="p-2 border">1</td>
+                <td class="p-2 border">User</td>
+                <td class="p-2 border">Artist Name</td>
+                <td class="p-2 border">2025-01-01</td>
+                <td class="p-2 border">Confirmed</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

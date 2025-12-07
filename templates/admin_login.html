@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- <nav class="bg-blue-600 text-white p-4">
+    <div class="max-w-6xl mx-auto flex justify-between">
+        <h1 class="font-bold text-xl">Admin Dashboard</h1>
+        <div class="space-x-4">
+            <a href="/adminapp/admin_dashboard" class="hover:underline">Dashboard</a>
+            <a href="/adminapp/manage_users" class="hover:underline">Manage Users</a>
+            <a href="/adminapp/view_bookings" class="hover:underline">Bookings</a>
+            <a href="/adminapp/view_reviews" class="hover:underline">Reviews</a>
+            <a href="/adminapp/approve_artist" class="hover:underline">Approvals</a>
+            <a href="/adminapp/view_feedbacks" class="hover:underline">Feedbacks</a>
+            {% if user %}
+            <a href="/adminapp/logout" class="hover:underline">Logout</a>
+            {% else %}
+            <a href="/adminapp/admin_login" class="hover:underline">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav> -->
+
+<div class="flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded shadow w-full max-w-sm">
+        <h2 class="text-xl font-bold text-center mb-6">Admin Login</h2>
+        {% if msg %}
+        <p id="alertMsg" class="text-red-600 text-center mb-3">{{ msg }}</p>
+    {% endif %}
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            <input name="username" type="text" placeholder="Username"
+                   class="w-full border rounded px-3 py-2">
+            <input name="password" type="password" placeholder="Password"
+                   class="w-full border rounded px-3 py-2">
+            <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    setTimeout(function() {
+        const m = document.getElementById("alertMsg");
+        if (m) {
+            m.style.display = "none";
+        }
+    }, 3000);
+</script>
+
+</body>
+</html>
