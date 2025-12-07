@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-lg mx-auto mt-10 bg-white p-6 shadow rounded">
+    <h2 class="text-2xl font-bold mb-4">Artist Registration</h2>
+
+    {% if msg %}
+        <p id="alertMsg" class="text-red-600 text-center mb-3">{{ msg }}</p>
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <input name="fullname" type="text" placeholder="Full Name" class="w-full p-3 border rounded">
+        <input name="email" type="email" placeholder="Email" class="w-full p-3 border rounded">
+        <input name="password" type="password" placeholder="Password" class="w-full p-3 border rounded">
+        <input name="category" type="text" placeholder="Category (Singer, Dancer, etc.)" class="w-full p-3 border rounded">
+
+        <button class="w-full bg-blue-600 text-white p-3 rounded">Register</button>
+
+        <!-- Fixed Login Link -->
+        <a href="/artist/artist_login/" class="block w-full text-center mt-2 p-3 bg-gray-200 rounded">
+            Already Have an Account? Login
+        </a>
+
+    </form>
+</div>
+
+<script>
+    setTimeout(function() {
+        const m = document.getElementById("alertMsg");
+        if (m) {
+            m.style.display = "none";
+        }
+    }, 3000);
+</script>
+
+</body>
+</html>

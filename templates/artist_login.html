@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-md mx-auto mt-16 bg-white p-6 shadow rounded">
+    <h2 class="text-xl font-bold mb-4">Artist Login</h2>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <input name="email" type="email" placeholder="Email" class="w-full p-3 border rounded">
+        <input name="password" type="password" placeholder="Password" class="w-full p-3 border rounded">
+
+        <button class="w-full bg-blue-600 text-white p-3 rounded">Login</button>
+
+        <!-- Added Register Link -->
+        <a href="/artist/artist_register/" class="block w-full text-center mt-2 p-3 bg-gray-200 rounded">
+            Create Account (Register)
+        </a>
+    </form>
+</div>
+
+</body>
+</html>

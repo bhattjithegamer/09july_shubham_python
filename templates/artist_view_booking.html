@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-5xl mx-auto mt-10 bg-white p-6 shadow rounded">
+    <h2 class="text-2xl font-bold mb-6 text-center">All Bookings</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-2 px-4 border">Customer Name</th>
+                    <th class="py-2 px-4 border">Artist Name</th>
+                    <th class="py-2 px-4 border">Event Date</th>
+                    <th class="py-2 px-4 border">Event Type</th>
+                </tr>
+            </thead>
+            <tbody>
+    {% for b in booking %}
+    <tr class="text-center">
+        <td class="py-2 px-4 border">{{ b.user }}</td> <!-- customer name -->
+        <td class="py-2 px-4 border">{{ b.artistname }}</td>
+        <td class="py-2 px-4 border">{{ b.date }}</td>
+        <td class="py-2 px-4 border">{{ b.location }}</td> <!-- event type/location -->
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5" class="py-4 text-center text-gray-500">No bookings found</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
