@@ -4,16 +4,16 @@
 
 {% block content %}
 <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-    <h2 class="text-2xl font-bold mb-4 text-center">Search Artist</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center">All Artists</h2>
 
-    <select class="w-full border p-2 rounded mb-4">
-        <option>Singer</option>
-        <option>Dancer</option>
-        <option>Painter</option>
-        <option>DJ</option>
-        <option>Photographer</option>
-    </select>
-
-    <button class="w-full bg-blue-600 text-white py-2 rounded">Search</button>
+    {% for i in artist %}
+        <div class="p-3 border rounded mb-2">
+            <h3 class="font-bold">{{ i.fullname }}</h3>
+            <p>Category: {{ i.category }}</p>
+            <p>Email: {{ i.email }}</p>
+        </div>
+    {% empty %}
+        <p class="text-center text-gray-500">No artists found</p>
+    {% endfor %}
 </div>
 {% endblock %}

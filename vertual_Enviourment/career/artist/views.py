@@ -1,5 +1,6 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import *
+from customer.models import *
 
 # Create your views here.
 
@@ -56,8 +57,11 @@ def artist_upload_media(request):
 def artist_feedback(request):
     return render(request,'artist_feedback.html')
 
-def artist_view_feedback(request):
-    return render(request,'artist_view_feedback.html')
+def artist_view_booking(request):
+    booking = book_artist_cls.objects.all()
+    return render(request, 'artist_view_booking.html', {'booking': booking})
 
-def artist_cancel_booking(request):
-    return render(request,'artist_cancel_booking.html')
+def delete_booking(request,id):
+    booking=get_object_or_404(book_artist_cls,id=id)
+    booking.delete()
+    return redirect('artist_view_booking')

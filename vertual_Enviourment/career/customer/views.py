@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import *
 from django.contrib.auth import logout
+from artist.models import *
 # Create your views here.
 
 def home(request):
@@ -42,6 +43,7 @@ def register(request):
     return render(request,'register.html')
 
 def manage_profile(request):
+    msg=""
     user_id=request.session.get('user_id')
     if not user_id:               # session empty છે → login page redirect
         return redirect('login')
@@ -49,13 +51,34 @@ def manage_profile(request):
         user=user_register.objects.get(id=user_id)
     except user_register.DoesNotExist:
         return redirect('login') 
-    return render(request,'manage_profile.html',{'user':user})
+    if request.method=='POST':
+        update_profile=register_form(request.POST,instance=user)
+        if update_profile.is_valid():
+            update_profile.save()
+            msg="Profile Updated Successfully!"
+        else:
+            msg=update_profile.errors
+    return render(request,'manage_profile.html',{'user':user,'msg':msg})
 
 def search_artist(request):
-    return render(request,'search_artist.html')
+    artist=register_artist.objects.all()
+    return render(request,'search_artist.html',{'artist':artist})
 
 def book_artist(request):
-    return render(request,'book_artist.html')
+    msg=""
+    user_id = request.session.get('user_id')
+    if request.method=='POST':
+        form=artist_booking_form(request.POST)
+
+        if form.is_valid():
+            booking=form.save(commit=False)
+            booking.user = user_register.objects.get(id=user_id)  # associate user
+            booking.save()
+            msg="booked successfuly"
+            return redirect('book_artist')
+        else:
+            msg="Booking Failed"
+    return render(request,'book_artist.html',{'msg':msg})
 
 def cancel_booking(request):
     return render(request,'cancel_booking.html')

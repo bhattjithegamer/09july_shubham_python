@@ -7,5 +7,12 @@ class user_register(models.Model):
     email=models.EmailField()
     password=models.CharField(max_length=100)
     mobile=models.IntegerField(max_length=10)
+    def __str__(self):
+        return self.fullname  # Ahiya customer nu naam return karo
 
-# class manage_profille(models.Model):
+class book_artist_cls(models.Model):
+    user = models.ForeignKey(user_register, on_delete=models.CASCADE)  # customer
+    artistname = models.CharField(max_length=50)
+    date = models.DateField()
+    location = models.CharField(max_length=100)
+

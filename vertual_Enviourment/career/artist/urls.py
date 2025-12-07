@@ -10,6 +10,7 @@ urlpatterns = [
     path('artist_manage_profile/',views.artist_manage_profile,name='artist_manage_profile'),
     path('artist_upload_media/',views.artist_upload_media,name='artist_upload_media'),
     path('artist_feedback/',views.artist_feedback,name='artist_feedback'),
-    path('artist_view_feedback/',views.artist_view_feedback,name='artist_view_feedback'),
-    path('artist_cancel_booking/',views.artist_cancel_booking,name='artist_cancel_booking')
+    path('artist_view_booking/',views.artist_view_booking,name='artist_view_booking'),
+    path('delete_booking/<int:id>/', views.delete_booking, name='delete_booking'),
+
 ]

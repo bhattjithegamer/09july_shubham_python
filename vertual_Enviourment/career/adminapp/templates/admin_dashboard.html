@@ -19,8 +19,11 @@
             <a href="/adminapp/view_reviews" class="hover:underline">Reviews</a>
             <a href="/adminapp/approve_artist" class="hover:underline">Approvals</a>
             <a href="/adminapp/view_feedbacks" class="hover:underline">Feedbacks</a>
+            {% if user %}
+            <a href="/adminapp/admin_logout" class="hover:underline">Logout</a>
+            {% else %}
             <a href="/adminapp/admin_login" class="hover:underline">Login</a>
-            <a href="/adminapp/logout" class="hover:underline">Logout</a>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -33,12 +36,12 @@
 
         <div class="bg-white p-6 rounded shadow">
             <h3 class="text-xl font-bold">Total Artists</h3>
-            <p class="text-3xl font-bold text-blue-600 mt-2">25</p>
+            <p class="text-3xl font-bold text-blue-600 mt-2">{{total_a}}</p>
         </div>
 
         <div class="bg-white p-6 rounded shadow">
             <h3 class="text-xl font-bold">Total Customers</h3>
-            <p class="text-3xl font-bold text-green-600 mt-2">120</p>
+            <p class="text-3xl font-bold text-green-600 mt-2">{{total_u}}</p>
         </div>
 
         <div class="bg-white p-6 rounded shadow">

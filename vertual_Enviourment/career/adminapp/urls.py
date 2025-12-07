@@ -10,5 +10,8 @@ urlpatterns = [
     path('view_reviews/',views.view_reviews,name='view_reviews'),
     path('approve_artist/',views.approve_artist,name='approve_artist'),
     path('view_feedbacks/',views.view_feedbacks,name='view_feedbacks'),
-    path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard')
+    path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),
+    path('admin_logout/',views.admin_logout,name='admin_logout'),
+
+
 ]
