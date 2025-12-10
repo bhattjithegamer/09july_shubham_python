@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>View Reviews</title>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-blue-600 text-white p-4">
+    <div class="max-w-6xl mx-auto flex justify-between">
+        <h1 class="font-bold text-xl">Admin Dashboard</h1>
+        <div class="space-x-4">
+            <a href="/adminapp/admin_dashboard" class="hover:underline">Dashboard</a>
+            <a href="/adminapp/manage_users" class="hover:underline">Manage Users</a>
+            <a href="/adminapp/view_bookings" class="hover:underline">Bookings</a>
+            <a href="/adminapp/view_reviews" class="hover:underline">Reviews</a>
+            <a href="/adminapp/approve_artist" class="hover:underline">Approvals</a>
+            <a href="/adminapp/view_feedbacks" class="hover:underline">Feedbacks</a>
+            {% if user %}
+            <a href="/adminapp/logout" class="hover:underline">Logout</a>
+            {% else %}
+            <a href="/adminapp/admin_login" class="hover:underline">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-4xl mx-auto mt-10 bg-white shadow p-6 rounded">
+    <h2 class="text-2xl font-bold mb-4">All Reviews</h2>
+
+    <ul class="space-y-4">
+        <li class="p-4 border rounded bg-gray-50">
+            <h3 class="font-bold">User Name</h3>
+            <p class="text-gray-700">Great performance!</p>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

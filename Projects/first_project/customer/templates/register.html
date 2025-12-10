@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+        
+         {% if msg %}
+            <p id="alertMsg" class="text-red-600 text-center mb-3">{{ msg }}</p>
+        {% endif %}
+
+        <form action="#" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block mb-1 font-medium">Full Name</label>
+                <input required type="text" name="fullname" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Email</label>
+                <input required type="email" name="email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Password</label>
+                <input required type="password" name="password" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Mobile</label>
+                <input required type="text" name="mobile" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Register</button>
+            </div>
+        </form>
+        <p class="text-sm text-center mt-4">Already have an account? 
+            <a href="/login" class="text-blue-500 hover:underline">Login</a>
+        </p>
+    </div>
+</div>
+
+
+<script>
+    setTimeout(function() {
+        const m = document.getElementById("alertMsg");
+        if (m) {
+            m.style.display = "none";
+        }
+    }, 3000);  // 3 second
+</script>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Search Artist{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">All Artists</h2>
+
+    {% for i in artist %}
+        <div class="p-3 border rounded mb-2">
+            <h3 class="font-bold">{{ i.fullname }}</h3>
+            <p>Category: {{ i.category }}</p>
+            <p>Email: {{ i.email }}</p>
+        </div>
+    {% empty %}
+        <p class="text-center text-gray-500">No artists found</p>
+    {% endfor %}
+</div>
+{% endblock %}
