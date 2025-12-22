@@ -1,0 +1,80 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="glass-card text-center">
+            <h5 class="text-white-50">Total Sales</h5>
+            <h2 class="fw-bold text-info">{{total_sale}}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card text-center">
+            <h5 class="text-white-50">New Orders</h5>
+            <h2 class="fw-bold text-warning">{{total_sale}}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card text-center">
+            <h5 class="text-white-50">Products</h5>
+            <h2 class="fw-bold text-success">{{total_product}}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="glass-card text-center">
+            <h5 class="text-white-50">Users</h5>
+            <h2 class="fw-bold text-danger">{{total_user}}</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="glass-card">
+            <h5 class="mb-4">Sales Analytics</h5>
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card">
+            <h5 class="mb-4">Recent Orders</h5>
+            {% for i in order %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between">
+                    <span>#ORD-{{ i.id }}</span> <span class="badge bg-success">Paid</span>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Revenue ($)',
+                data: [1200, 1900, 3000, 5000, 2000, 3500],
+                borderColor: '#00bfff',
+                backgroundColor: 'rgba(0, 191, 255, 0.1)',
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+        }
+    });
+</script>
+{% endblock %}

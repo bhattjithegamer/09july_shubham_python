@@ -1,0 +1,23 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Settings{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <h5 class="mb-4 text-info">General Settings</h5>
+    <form>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label">Enable New User Registration</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label">Email Notifications</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox">
+            <label class="form-check-label">Maintenance Mode</label>
+        </div>
+        <button class="btn btn-primary mt-3">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

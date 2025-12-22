@@ -1,0 +1,128 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Order Details{% endblock %}
+
+{% block content %}
+<!-- Top Header & Status Update -->
+<div class="d-flex justify-content-between flex-wrap align-items-center mb-4">
+    <div>
+        <h4 class="mb-0">Order <span class="text-info">#ORD-9988</span></h4>
+        <small class="text-white-50">Placed on: Dec 10, 2025 at 10:30 AM</small>
+    </div>
+    
+    <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
+        <label class="mb-0 small">Change Status:</label>
+        <select class="form-select form-select-sm form-control-dark w-auto">
+            <option>Pending</option>
+            <option>Processing</option>
+            <option>Shipped</option>
+            <option selected>Delivered</option>
+            <option>Cancelled</option>
+        </select>
+        <button class="btn btn-sm btn-info">Update</button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Customer Info -->
+    <div class="col-md-4">
+        <div class="glass-card h-100">
+            <h5 class="border-bottom border-secondary pb-2 mb-3"><i class="bi bi-person"></i> Customer Info</h5>
+            <div class="d-flex align-items-center mb-3">
+                <img src="https://ui-avatars.com/api/?name=Rahul+Patel&background=random" class="rounded-circle me-3" width="50">
+                <div>
+                    <h6 class="mb-0">Rahul Patel</h6>
+                    <small class="text-white-50">Customer ID: #USER-45</small>
+                </div>
+            </div>
+            <p class="mb-1"><i class="bi bi-envelope"></i> rahul@example.com</p>
+            <p class="mb-1"><i class="bi bi-telephone"></i> +91 98765 43210</p>
+        </div>
+    </div>
+
+    <!-- Shipping Address -->
+    <div class="col-md-4">
+        <div class="glass-card h-100">
+            <h5 class="border-bottom border-secondary pb-2 mb-3"><i class="bi bi-truck"></i> Shipping Address</h5>
+            <p class="text-white-50">
+                B-404, Tech Park Residency,<br>
+                Near Science City Circle,<br>
+                Ahmedabad, Gujarat,<br>
+                India - 380060.
+            </p>
+            <h6 class="text-info mt-3">Payment Method</h6>
+            <p class="mb-0"><i class="bi bi-credit-card"></i> Visa Card ending **4242</p>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-4">
+        <div class="glass-card h-100">
+            <h5 class="border-bottom border-secondary pb-2 mb-3"><i class="bi bi-receipt"></i> Order Summary</h5>
+            <div class="d-flex justify-content-between mb-2"><span>Subtotal:</span> <span>$2,499.00</span></div>
+            <div class="d-flex justify-content-between mb-2"><span>Shipping:</span> <span>$0.00</span></div>
+            <div class="d-flex justify-content-between mb-2"><span>Tax (5%):</span> <span>$125.00</span></div>
+            <hr class="border-secondary">
+            <div class="d-flex justify-content-between fs-5 fw-bold text-success">
+                <span>Total:</span> <span>$2,624.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Items List -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="glass-card">
+            <h5 class="mb-3">Items Ordered</h5>
+            <div class="table-responsive">
+                <table class="table table-dark-glass align-middle">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=60" class="rounded me-3 border border-secondary">
+                                    <div>
+                                        <h6 class="mb-0">Alienware X17 R2</h6>
+                                        <small class="text-white-50">Gaming Laptop / 32GB RAM</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>$2,499.00</td>
+                            <td>1</td>
+                            <td class="text-end fw-bold">$2,499.00</td>
+                        </tr>
+                        <!-- Biju item -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="https://images.unsplash.com/photo-1588872657578-a3d2af14e501?w=60" class="rounded me-3 border border-secondary">
+                                    <div>
+                                        <h6 class="mb-0">Gaming Mouse</h6>
+                                        <small class="text-white-50">Accessories</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>$50.00</td>
+                            <td>2</td>
+                            <td class="text-end fw-bold">$100.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="text-end mt-4">
+                <button class="btn btn-outline-light me-2"><i class="bi bi-printer"></i> Print Invoice</button>
+                <a href="{% url 'orders' %}" class="btn btn-info fw-bold">Back to Orders</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

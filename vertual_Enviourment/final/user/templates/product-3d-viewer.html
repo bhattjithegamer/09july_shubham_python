@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}3D View - Alienware{% endblock %}
+
+{% block content %}
+<style>
+    .viewer-container {
+        height: 85vh;
+        width: 100%;
+        position: relative;
+    }
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+    }
+</style>
+
+<div class="viewer-container">
+    <a href="{% url 'product' %}" class="btn btn-outline-light back-btn rounded-pill px-4"><i class="bi bi-arrow-left"></i> Back to Product</a>
+    
+    <!-- Ahia Spline nu 3D model (Example link che) -->
+    <iframe src="https://my.spline.design/macbookpro-228729298e30528578505555" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+{% endblock %}

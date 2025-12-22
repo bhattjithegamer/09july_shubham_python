@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}My Wishlist{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="mb-4">My Wishlist <i class="bi bi-heart-fill text-danger"></i></h2>
+    
+    <div class="row g-3">
+        {% for item in w_items %}
+        <div class="col-12" data-aos="fade-up">
+            <div class="d-flex align-items-center p-3 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <!-- Product Image -->
+                <img src="{{ item.product.image.url }}" class="rounded me-3" style="width: 100px; height: 80px; object-fit: cover;">
+                
+                <div class="flex-grow-1">
+                    <h5 class="mb-1 text-white">{{ item.product.title }}</h5>
+                    <span class="text-info fw-bold">₹ {{ item.product.price }}</span>
+                </div>
+                
+                <div>
+                    <a href="{% url 'add_to_cart' item.product.id %}" class="btn btn-sm btn-primary rounded-pill me-2">Add to Cart</a>
+                    
+                    <!-- ચોકડી દબાવો એટલે Wishlist માંથી નીકળી જાય -->
+                    <a href="{% url 'toggle_wishlist' item.product.id %}" class="btn btn-sm btn-outline-danger rounded-circle">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-white mt-5">
+            <h4>Your wishlist is empty 💔</h4>
+            <a href="/" class="btn btn-outline-light mt-3">Continue Shopping</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

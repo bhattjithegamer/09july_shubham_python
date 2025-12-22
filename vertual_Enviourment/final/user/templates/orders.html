@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="mb-4">Order History</h2>
+    <div class="table-responsive rounded-3" data-aos="fade-up" style="border: 1px solid rgba(255,255,255,0.1);">
+        <table class="table table-dark table-hover mb-0">
+            <thead>
+                <tr class="text-uppercase small text-white-50">
+                    <th class="py-3 ps-4">Order ID</th>
+                    <th class="py-3">Date</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3">Total</th>
+                    <th class="py-3 text-end pe-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td class="ps-4 fw-bold">#ORD-{{ order.id }}</td>
+                    <td>{{ order.created_at }}</td>
+                    <td><span class="badge bg-success bg-opacity-75">Delivered</span></td>
+                    <td>{{ order.total_amount }}</td>
+                    <td class="text-end pe-4"><a href="#" class="btn btn-sm btn-outline-light">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

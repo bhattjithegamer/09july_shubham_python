@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="mb-4">
+        <h4>Search Results for: <span class="text-info">"Gaming Laptop"</span></h4>
+        <p class="text-white-50">We found 3 results matching your search.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for i in "123" %}
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ i }}00">
+            <div class="card bg-transparent border-secondary h-100" style="backdrop-filter: blur(5px);">
+                <img src="https://images.unsplash.com/photo-1588872657578-a3d2af14e501?w=500" class="card-img-top" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Asus ROG Strix {{ i }}</h5>
+                    <p class="card-text text-white-50 small">High performance gaming laptop.</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fw-bold text-info">$1,499</span>
+                        <a href="{% url 'product' %}" class="btn btn-sm btn-primary rounded-pill">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

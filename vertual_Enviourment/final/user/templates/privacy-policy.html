@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="p-5 rounded-4" style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+        <h1 class="mb-5 text-center fw-bold border-bottom border-secondary pb-4">Privacy Policy</h1>
+        
+        <div class="text-white-50" style="line-height: 1.8;">
+            <h4 class="text-white mt-4">1. Information We Collect</h4>
+            <p>At TechBeast, we collect various types of information in connection with the services we provide, including:</p>
+            <ul>
+                <li>Personal identification information (Name, email address, phone number, etc.)</li>
+                <li>Payment details (processed securely via third-party gateways)</li>
+                <li>Browser and device data for analytics purposes</li>
+            </ul>
+
+            <h4 class="text-white mt-4">2. How We Use Your Data</h4>
+            <p>Your data is used to process orders, improve our website functionality, and send promotional emails (only if you opted in). We do not sell your data to third parties.</p>
+
+            <h4 class="text-white mt-4">3. Cookies</h4>
+            <p>We use cookies to enhance your shopping experience. You can choose to disable cookies through your browser settings, but some features of the site may not work properly.</p>
+
+            <h4 class="text-white mt-4">4. Security</h4>
+            <p>We implement advanced security measures including SSL encryption to protect your personal information.</p>
+
+            <h4 class="text-white mt-4">5. Contact Us</h4>
+            <p>If you have any questions about this Privacy Policy, please contact us at <a href="#" class="text-info">privacy@techbeast.com</a>.</p>
+        </div>
+        
+        <div class="mt-5 text-center">
+            <p class="small text-muted">Last updated: December 2024</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - TechBeast Laptops{% endblock %}
+
+{% block content %}
+<style>
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        padding-top: 60px;
+        
+        /* 🔥 JUGAAD: Aa line thi logo cut thai jase */
+        overflow: hidden; 
+    }
+
+    .hero-iframe {
+        position: absolute;
+        top: 0; 
+        
+        /* 🔥 LOGO HIDE HACK START */
+        /* Iframe ne original karta moti kari didhi */
+        left: 45%;    /* Thodu left adjust karyu */
+        width: 65%;   /* Width vadhari didhi jethi right side no logo kapai jay */
+        height: 115%; /* Height vadhari jethi bottom no logo niche jato re */
+        /* 🔥 LOGO HIDE HACK END */
+        
+        border: none; 
+        z-index: 0;
+    }
+
+    .hero-content-box {
+        position: relative; z-index: 2;
+        max-width: 550px; margin-left: 10%; padding: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .laptop-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        transition: 0.3s;
+        overflow: hidden;
+    }
+    .laptop-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,255,255,0.1);
+        border-color: #00bfff;
+    }
+    .laptop-img {
+        height: 220px; object-fit: cover; width: 100%;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <!-- 3D Spline Robot -->
+    <iframe class="hero-iframe" src="https://my.spline.design/genkubgreetingrobot-hALCrNRt70Sm60NcauAlEHxr/" allowfullscreen></iframe>
+
+    <div class="hero-content-box" data-aos="fade-right">
+        <h1 class="display-4 fw-bold">Power. Performance. <span style="color: #00bfff;">Perfection.</span></h1>
+        <p class="lead text-light mt-3">Discover the ultimate gaming and productivity laptops. Powered by RTX 4090 & M3 Chips.</p>
+        <div class="mt-4">
+            <a href="{% url 'shop' %}" class="btn btn-info btn-lg text-white rounded-pill px-5 shadow-lg">Shop Laptops</a>
+            <a href="#featured" class="btn btn-outline-light btn-lg rounded-pill px-4 ms-2">View More</a>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Laptops -->
+<!-- Featured Laptops -->
+<div class="container my-5 py-5" id="featured">
+    <div class="text-center mb-5" data-aos="fade-up">
+        <h2 class="fw-bold display-5">Trending <span class="text-info">Beasts</span></h2>
+        <p class="text-white-50">Top rated laptops of the month</p>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- Loop Starts Here -->
+        {% for p in products %}
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="laptop-card h-100">
+                
+                <!-- Product Image -->
+                {% if p.image %}
+                    <img src="{{ p.image.url }}" class="laptop-img" alt="{{ p.title }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/500" class="laptop-img" alt="No Image">
+                {% endif %}
+
+                <div class="card-body p-4">
+                    <!-- Category Badge -->
+                    <div class="badge bg-danger mb-2">{{ p.category }}</div>
+                    
+                    <!-- Title -->
+                    <h5 class="fw-bold">{{ p.title }}</h5>
+                    
+                    <!-- Processor / RAM info -->
+                    <p class="text-white-50 small">{{ p.processor }} • {{ p.ram }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Price -->
+                        <span class="h5 mb-0 text-info">₹ {{ p.price }}</span>
+                        
+                        <!-- Link to Detail Page -->
+                        <a href="{% url 'product_details' p.id %}" class="btn btn-sm btn-outline-light rounded-pill">View Specs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-white">
+            <p>No featured products available yet.</p>
+        </div>
+        {% endfor %}
+        <!-- Loop Ends Here -->
+
+    </div>
+</div>
+{% endblock %}

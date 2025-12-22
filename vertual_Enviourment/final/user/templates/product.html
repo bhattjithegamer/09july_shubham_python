@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Shop - All Laptops{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    
+    <!-- જો પ્રોડક્ટ્સ હોય તો લૂપ ફેરવો -->
+    {% if products %}
+        {% for product in products %}
+        
+        <!-- દરેક પ્રોડક્ટ માટે એક અલગ Row -->
+        <div class="row align-items-center mb-5 pb-5 border-bottom border-secondary">
+            
+            <!-- Product Images (Left Side) -->
+            <div class="col-md-6 mb-4" data-aos="fade-right">
+                <div class="p-3 rounded-4 text-center" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <!-- Main Image (Fixed Size) -->
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" 
+                         class="img-fluid rounded-3" 
+                         style="height: 300px; width: 100%; object-fit: contain;" 
+                         alt="{{ product.title }}">
+                    {% else %}
+                    <div class="text-white py-5">No Image Available</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Small Images (Optional) -->
+                <div class="row mt-3 g-2 justify-content-center">
+                    {% if product.image %}
+                    <div class="col-3">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded border border-secondary" style="height: 60px; width: 100%; object-fit: cover;">
+                    </div>
+                    <div class="col-3">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded border border-secondary" style="height: 60px; width: 100%; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Product Info (Right Side) -->
+            <div class="col-md-6" data-aos="fade-left">
+                <h1 class="display-5 fw-bold">{{ product.title }}</h1>
+                
+                <div class="mb-3">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <i class="bi bi-star-half text-warning"></i>
+                    <span class="text-white-50 ms-2">(120 Reviews)</span>
+                </div>
+
+                <h2 class="text-info fw-bold mb-4">₹ {{ product.price }}</h2>
+                <p class="text-white-50">{{ product.description }}</p>
+
+                <!-- Specs Table -->
+                <table class="table table-dark table-striped table-hover mt-4 border border-secondary">
+                    <tbody>
+                        <tr><td class="text-white-50">Processor</td><td>{{ product.processor }}</td></tr>
+                        <tr><td class="text-white-50">RAM</td><td>{{ product.ram }}</td></tr>
+                        <tr><td class="text-white-50">Storage</td><td>{{ product.storage }}</td></tr>
+                        <tr><td class="text-white-50">Graphics</td><td>{{ product.graphics }}</td></tr>
+                        <tr><td class="text-white-50">Display</td><td>{{ product.display }}</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-4 d-flex gap-3">
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-lg rounded-pill px-5">Add to Cart</a>
+                    <!-- Link to Details Page (Optional) -->
+                    <a href="#" class="btn btn-outline-light btn-lg rounded-circle"><i class="bi bi-eye"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Row પુરી -->
+        {% endfor %}
+
+    {% else %}
+        <!-- જો ડેટાબેઝ ખાલી હોય તો -->
+        <div class="row">
+            <div class="col-12 text-center text-white py-5">
+                <h2 class="display-6">No products available currently.</h2>
+                <p class="text-white-50">Please check back later.</p>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

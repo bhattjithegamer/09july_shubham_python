@@ -1,0 +1,95 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Add New Product{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="glass-card">
+            <!-- Ensure method is POST and enctype is multipart/form-data for images -->
+            <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <!-- ADDED name="title" -->
+                    <input type="text" name="title" class="form-control form-control-dark" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price ($)</label>
+                        <!-- ADDED name="price" -->
+                        <input type="number" name="price" class="form-control form-control-dark" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock Quantity</label>
+                        <!-- ADDED name="stock" -->
+                        <input type="number" name="stock" class="form-control form-control-dark" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <!-- ADDED name="category" -->
+                    <select name="category" class="form-select form-control-dark">
+<option value="Gaming Laptop">Gaming Laptop</option>
+<option value="Ultrabook">Ultrabook</option>
+<option value="MacBook">MacBook</option>
+<option value="Business Laptop">Business Laptop</option>
+<option value="Student Laptop">Student Laptop</option>
+<option value="Workstation Laptop">Workstation Laptop</option>
+<option value="2-in-1 Laptop">2-in-1 Laptop</option>
+<option value="Convertible Laptop">Convertible Laptop</option>
+<option value="Budget Laptop">Budget Laptop</option>
+<option value="Premium Laptop">Premium Laptop</option>
+<option value="Chromebook">Chromebook</option>
+<option value="Creator Laptop">Creator Laptop</option>
+<option value="AI Laptop">AI Laptop</option>
+<option value="Touchscreen Laptop">Touchscreen Laptop</option>
+<option value="Thin & Light Laptop">Thin & Light Laptop</option>
+<option value="Rugged Laptop">Rugged Laptop</option>
+
+                    </select>
+                </div>
+                
+                <!-- You were missing these fields in your HTML but they are in your Model -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Processor</label>
+                        <input type="text" name="processor" class="form-control form-control-dark">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RAM</label>
+                        <input type="text" name="ram" class="form-control form-control-dark">
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Storage</label>
+                        <input type="text" name="storage" class="form-control form-control-dark">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Graphics</label>
+                        <input type="text" name="graphics" class="form-control form-control-dark">
+                    </div>
+                     <div class="col-md-12 mb-3">
+                        <label class="form-label">Display</label>
+                        <input type="text" name="display" class="form-control form-control-dark">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <!-- ADDED name="description" -->
+                    <textarea name="description" class="form-control form-control-dark" rows="4"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Product Image</label>
+                    <!-- ADDED name="image" -->
+                    <input type="file" name="image" class="form-control form-control-dark">
+                </div>
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-info fw-bold">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

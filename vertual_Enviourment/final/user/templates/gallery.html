@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Gallery - TechBeast{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h2 class="fw-bold">Our Gallery</h2>
+        <p class="text-white-50">Setup inspiration and customer photos.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Loop for 6 images -->
+        {% for product in products %}
+        <div class="col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="{{ i }}00">
+            <div class="overflow-hidden rounded-3 border border-secondary" style="position: relative; height: 250px;">
+                <img src="{{ product.image.url }}" 
+                     class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;"
+                     onmouseover="this.style.transform='scale(1.1)'" 
+                     onmouseout="this.style.transform='scale(1)'">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,245 @@
+from django.shortcuts import render,redirect,get_object_or_404
+from .forms import *
+from adminapp.models import *
+from django.contrib import messages
+from .models import *
+from .models import Product, Cart, wishlist as WishlistModel  
+
+def index(request):
+    products = Product.objects.all()
+    return render(request, 'index.html', {'products': products})
+
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    if request.method == 'POST':
+        form = contact_form(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('contact')
+    return render(request, 'contact.html')
+
+def shop(request):
+    products = Product.objects.all()
+    uid = request.session.get('user_id')
+    wishlist_ids = []
+
+    if uid:
+        # અહી wishlist.objects ને બદલે WishlistModel.objects લખો
+        wishlist_ids = list(WishlistModel.objects.filter(user_id=uid).values_list('product_id', flat=True))
+
+    return render(request, 'shop.html', {'products': products, 'wishlist_ids': wishlist_ids})
+
+def product(request):
+    products = Product.objects.all()
+    return render(request, 'product.html',{'products': products})
+
+def product_details(request, id):
+    product = get_object_or_404(Product, id=id) # ID પરથી એક પ્રોડક્ટ શોધો
+    return render(request, 'product.html', {'products': [product]})
+
+def cart(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    items = Cart.objects.filter(user_id=user_id)
+
+    total = 0
+    for item in items:
+        item.total_price = item.product.price * item.quantity
+        total += item.total_price
+
+    return render(request, 'cart.html', {
+        'cart': items,
+        'total': total
+    })
+
+
+
+def add_to_cart(request, id):
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    product = get_object_or_404(Product, id=id)
+
+    cart_item, created = Cart.objects.get_or_create(
+        user_id=user_id,   # ✅ CORRECT
+        product=product
+    )
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('cart')
+
+def checkout(request):
+    u_id = request.session.get('user_id')
+    if not u_id: return redirect('login')
+
+    # ડાયરેક્ટ ID થી ફિલ્ટર કરો, ઓબ્જેક્ટ લાવવાની જરૂર નથી
+    items = Cart.objects.filter(user_id=u_id)
+    total = sum(i.product.price * i.quantity for i in items)
+
+    if request.method == 'POST':
+        form = payment_form(request.POST)
+        if form.is_valid():
+            pay = form.save(commit=False)
+            pay.user_id = u_id
+            pay.total_amount = total
+            method = request.POST.get('payment_method')
+
+            # --- SMART LOGIC (High Short) ---
+            pay.cash_on_delivery = (method == 'cod') # True/False automatic set થશે
+            
+            # જો કાર્ડ ન હોય તો કાર્ડની વિગતો સાફ કરો
+            if method != 'card': pay.debit_card_number = pay.mm_yy = pay.cvv = None
+            # જો UPI ન હોય તો UPI ID સાફ કરો
+            if method != 'upi': pay.upi_id = None
+            
+            pay.save()
+            items.delete() # કાર્ટ ખાલી
+            return render(request, 'checkout.html', {'success': True})
+
+    return render(request, 'checkout.html', {'total': total})
+
+def login_page(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        user = user_register.objects.filter(email=email,password=password).first()
+        if user:
+            request.session['user_id'] = user.id
+            return redirect('index')
+        else:
+            msg = "Invalid Credentials"
+            return render(request, 'login.html', {'msg': msg})
+    return render(request, 'login.html')
+
+def register(request):
+    msg=""
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if user_register.objects.filter(email=email).exists():
+            msg = "Email already exists plese login"
+            return render(request, 'register.html', {'msg': msg})
+
+        form = user_register_form(request.POST)
+        if form.is_valid():
+            user=form.save()
+            request.session['user_id'] = user.id
+            msg = "User Registered Successfully"
+            return redirect('login')
+        else:
+            print("Form is not valid")
+    return render(request, 'register.html', {'msg': msg})
+
+# Short ma baki badha mate pan same pattern follow karjo:
+def blog(request): 
+    return render(request, 'blog.html')
+
+def blog_item(request): 
+    return render(request, 'blog-item.html')
+
+def careers(request): 
+    return render(request, 'careers.html')
+
+def faq(request): 
+    return render(request, 'faq.html')
+
+def gallery(request): 
+    products = Product.objects.all()
+    return render(request, 'gallery.html', {'products': products})
+
+def order_success(request): 
+    return render(request, 'order-success.html')
+
+def orders(request): 
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+
+    orders = payment_cls.objects.filter(user_id=user_id).order_by('-created_at')
+     
+    return render(request, 'orders.html', {'orders': orders})
+
+def privacy_policy(request): 
+    return render(request, 'privacy-policy.html')
+
+def product_3d_viewer(request): 
+    return render(request, 'product-3d-viewer.html')
+
+def profile(request): 
+    like = wishlist.objects.all()
+    orders = payment_cls.objects.all()
+
+    total_like = len(like)
+    total_orders = len(orders)
+
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    
+    user = user_register.objects.filter(id=user_id).first()
+    return render(request, 'profile.html', {'user': user, 'total_orders': total_orders, 'total_like': total_like})
+
+def search_results(request): 
+    return render(request, 'search-results.html')
+
+def terms(request): 
+    return render(request, 'terms.html')
+
+# આ ફંક્શનનું નામ 'wishlist' ન હોવું જોઈએ, 'wishlist_page' રાખો
+def wishlist_page(request):
+    uid = request.session.get('user_id')
+    if not uid: return redirect('login')
+    
+    # અહી પણ WishlistModel વાપરો
+    w_items = WishlistModel.objects.filter(user_id=uid) 
+    return render(request, 'wishlist.html', {'w_items': w_items})
+
+def toggle_wishlist(request, pid):
+    uid = request.session.get('user_id')
+    if not uid: return redirect('login')
+
+    # અહી પણ WishlistModel વાપરો
+    item = WishlistModel.objects.filter(user_id=uid, product_id=pid)
+    if item.exists():
+        item.delete()
+    else:
+        WishlistModel.objects.create(user_id=uid, product_id=pid)
+    
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+def page_1(request): 
+    return render(request, 'page-1.html')
+
+def page_2(request): 
+    return render(request, 'page-2.html')
+
+def page_3(request): 
+    return render(request, 'page-3.html')
+
+def page_4(request): 
+    return render(request, 'page-4.html')
+
+def page_5(request): 
+    return render(request, 'page-5.html')
+
+def user_logout(request):
+    try:
+        del request.session['user_id']
+    except KeyError:
+        pass
+    return redirect('login')
+
+def delete_cart(request,id):
+    cart_item = get_object_or_404(Cart, id=id)
+    cart_item.delete()
+    return redirect('cart')
+    

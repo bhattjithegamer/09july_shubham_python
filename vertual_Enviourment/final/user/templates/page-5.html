@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Mega Sale - 50% OFF{% endblock %}
+
+{% block content %}
+<style>
+    .sale-hero {
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .countdown-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.2);
+        display: inline-block;
+        margin: 0 10px;
+        min-width: 100px;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="sale-hero mb-5">
+    <div data-aos="zoom-in">
+        <h1 class="display-1 fw-bold text-danger">FLASH SALE</h1>
+        <h2 class="text-white mb-4">UP TO 50% OFF ON GAMING LAPTOPS</h2>
+        
+        <!-- Timer -->
+        <div class="d-flex justify-content-center mt-4 mb-5 flex-wrap gap-2">
+            <div class="countdown-box">
+                <h2 class="mb-0 fw-bold">02</h2>
+                <small>Days</small>
+            </div>
+            <div class="countdown-box">
+                <h2 class="mb-0 fw-bold">14</h2>
+                <small>Hours</small>
+            </div>
+            <div class="countdown-box">
+                <h2 class="mb-0 fw-bold">45</h2>
+                <small>Minutes</small>
+            </div>
+        </div>
+
+        <a href="{% url 'shop' %}" class="btn btn-danger btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">Shop The Sale</a>
+    </div>
+</div>
+
+<!-- Deals Section -->
+<div class="container pb-5">
+    <h3 class="mb-4 text-center">Limited Time Deals</h3>
+    <div class="row g-4">
+        <!-- Deal 1 -->
+        <div class="col-md-6" data-aos="fade-right">
+            <div class="card bg-dark text-white border-danger mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400" class="img-fluid rounded-start h-100" style="object-fit: cover;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger fw-bold">Alienware Deal</h5>
+                            <p class="card-text">Save $500 on the Alienware M15. RTX 3070, 16GB RAM.</p>
+                            <p class="card-text"><small class="text-white-50"><del>$2000</del> <span class="text-success fw-bold fs-5">$1500</span></small></p>
+                            <button class="btn btn-sm btn-outline-danger">Grab Deal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deal 2 -->
+        <div class="col-md-6" data-aos="fade-left">
+            <div class="card bg-dark text-white border-warning mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://images.unsplash.com/photo-1531297425971-ec1bf8a55b71?w=400" class="img-fluid rounded-start h-100" style="object-fit: cover;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning fw-bold">Razer Bundle</h5>
+                            <p class="card-text">Free Gaming Mouse + Headset with Razer Blade 14.</p>
+                            <p class="card-text"><small class="text-white-50">Bundle Value: <span class="text-success fw-bold fs-5">$200 Free</span></small></p>
+                            <button class="btn btn-sm btn-outline-warning">Grab Deal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

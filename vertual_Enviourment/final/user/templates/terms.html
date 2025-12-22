@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Terms of Service{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="p-5 rounded-4" style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+        <h1 class="mb-5 text-center fw-bold border-bottom border-secondary pb-4">Terms & Conditions</h1>
+        
+        <div class="text-white-50" style="line-height: 1.8;">
+            <h4 class="text-white mt-4">1. Acceptance of Terms</h4>
+            <p>By accessing and using TechBeast (the "Website"), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.</p>
+
+            <h4 class="text-white mt-4">2. Product Availability</h4>
+            <p>All products are subject to availability. We reserve the right to limit the quantity of products we supply or discontinue any product at any time.</p>
+
+            <h4 class="text-white mt-4">3. Pricing and Payments</h4>
+            <p>Prices are listed in USD. We reserve the right to change prices without notice. Payment must be received before shipment.</p>
+
+            <h4 class="text-white mt-4">4. Returns and Refunds</h4>
+            <p>You may return items within 30 days of receipt for a refund or exchange, subject to our Return Policy page.</p>
+            
+            <h4 class="text-white mt-4">5. Limitation of Liability</h4>
+            <p>TechBeast shall not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use our products.</p>
+        </div>
+
+        <div class="mt-5 d-flex justify-content-center gap-3">
+            <a href="{% url 'index' %}" class="btn btn-outline-light rounded-pill px-4">Decline</a>
+            <button class="btn btn-info rounded-pill px-4 text-white fw-bold">I Agree</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

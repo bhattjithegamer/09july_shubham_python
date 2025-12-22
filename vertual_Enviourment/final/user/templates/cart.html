@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="mb-4" data-aos="fade-right">Shopping Cart</h2>
+    
+    {% if cart|length > 0 %}
+    <div class="row">
+        <div class="col-lg-8" data-aos="fade-up">
+            <div class="p-4 rounded-3" style="background: rgba(255,255,255,0.05);">
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                        <tr>
+                            <td>
+                                <!-- Image Dynamic -->
+                                {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" class="rounded me-2" width="60">
+                                {% endif %}
+                                {{ item.product.title }}
+                            </td>
+                            <td>${{ item.product.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.total_price }}</td>
+                            <td>
+                                <a href="{% url 'delete_cart' item.id %}" class="text-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="col-lg-4" data-aos="fade-left">
+            <div class="p-4 rounded-3" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                <h4>Order Summary</h4>
+                <div class="d-flex justify-content-between mt-3"><span>Subtotal</span><span>${{ total }}</span></div>
+                <hr>
+                <div class="d-flex justify-content-between fs-5 fw-bold text-info">
+                    <span>Total</span><span>${{ total  }}</span>
+                </div>
+                <a href="{% url 'checkout' %}" class="btn btn-primary w-100 mt-4 rounded-pill">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <h3>Your cart is empty! 😢</h3>
+        <a href="{% url 'shop' %}" class="btn btn-info mt-3 rounded-pill">Go Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

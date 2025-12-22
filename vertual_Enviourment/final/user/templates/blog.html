@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Our Blog{% endblock %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="text-center mb-5">Tech News & Reviews</h2>
+    <div class="row g-4">
+        {% for i in "123" %}
+        <div class="col-md-4" data-aos="fade-up">
+            <div class="card bg-dark border-secondary h-100">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500" class="card-img-top" height="200" style="object-fit:cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-white">Top 5 Gaming Laptops in 2024</h5>
+                    <p class="card-text text-white-50 small">Read about the best machines for high-fps gaming...</p>
+                    <a href="{% url 'blog-item' %}" class="btn btn-outline-info btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

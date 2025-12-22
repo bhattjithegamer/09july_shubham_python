@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Shop - All Laptops{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Loop through Database Products (અહી products પર લૂપ ફેરવો) -->
+<div class="container py-5 mt-5">
+    <div class="row align-items-center">
+        <!-- Product Images -->
+         {% for product in products %}
+        <div class="col-md-6 mb-4" data-aos="fade-right">
+            <div class="p-3 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <img src="{{ product.image.url }}" class="img-fluid rounded-3" style="height: 300px; width: 100%; object-fit: contain;" alt="Laptop">
+            </div>
+            <div class="row mt-3 g-2">
+                <div class="col-3"><img src="{{ product.image.url }}" class="img-fluid rounded border border-secondary"></div>
+                <div class="col-3"><img src="{{ product.image.url }}" class="img-fluid rounded border border-secondary"></div>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-6" data-aos="fade-left">
+            <h1 class="display-5 fw-bold">{{ product.title }}</h1>
+            <div class="mb-3">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-half text-warning"></i>
+                <span class="text-white-50 ms-2">(120 Reviews)</span>
+            </div>
+            <h2 class="text-info fw-bold mb-4">₹ {{ product.price }}</h2>
+            <p class="text-white-50">{{ product.description }}</p>
+
+            <!-- Specs Table -->
+            <table class="table table-dark table-striped table-hover mt-4 border border-secondary">
+                <tbody>
+                    <tr><td>Processor</td><td>{{ product.processor }}</td></tr>
+                    <tr><td>RAM</td><td>{{ product.ram }}</td></tr>
+                    <tr><td>Storage</td><td>{{ product.storage }}</td></tr>
+                    <tr><td>Graphics</td><td>{{ product.graphics }}</td></tr>
+                    <tr><td>Display</td><td>{{ product.display }}</td></tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4 d-flex gap-3">
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-lg rounded-pill px-5">Add to Cart</a>
+                <a href="{% url 'toggle_wishlist' product.id %}" class="btn btn-outline-light rounded-circle">
+                        {% if product.id in wishlist_ids %}
+                            <i class="bi bi-heart-fill text-danger"></i>
+                        {% else %}
+                            <i class="bi bi-heart"></i>
+                        {% endif %}
+                    </a>
+            </div>
+        </div>
+    </div>
+</div>
+    {% empty %}
+    <!-- જો ડેટાબેઝમાં કોઈ પ્રોડક્ટ ન હોય તો આ દેખાશે -->
+    <div class="col-12 text-center text-white">
+        <h4>No products available currently.</h4>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

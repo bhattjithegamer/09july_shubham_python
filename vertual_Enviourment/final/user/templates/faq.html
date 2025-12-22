@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}FAQ{% endblock %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+    <div class="accordion accordion-flush" id="faqAccordion" data-aos="fade-up">
+        <!-- Question 1 -->
+        <div class="accordion-item bg-transparent border-bottom border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    What is your return policy?
+                </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-white-50">We offer a 30-day return policy for all laptops.</div>
+            </div>
+        </div>
+        <!-- Question 2 -->
+        <div class="accordion-item bg-transparent border-bottom border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    Do you ship internationally?
+                </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-white-50">Yes, we ship to over 100 countries worldwide.</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

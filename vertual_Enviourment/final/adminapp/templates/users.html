@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Users{% endblock %}
+
+{% block content %}
+
+<style>
+/* ONLY TEXT COLOR WHITE */
+.table-dark-glass th,
+.table-dark-glass td {
+    color: #ffffff !important;
+}
+</style>
+
+<div class="glass-card">
+    <table style="background-color: black;" class="table table-dark-glass align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Joined</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.fullname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_at }}</td>
+                <td>
+                    <a href="{% url 'block_user' user.id %}" class="btn btn-sm btn-outline-danger">
+                        Block
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

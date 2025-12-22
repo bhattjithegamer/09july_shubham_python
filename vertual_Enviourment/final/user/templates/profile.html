@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3" data-aos="fade-right">
+            <div class="list-group bg-transparent">
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white active">Dashboard</a>
+                <a href="{% url 'orders' %}" class="list-group-item list-group-item-action bg-transparent text-white">My Orders</a>
+                <a href="{% url 'wishlist_page' %}" class="list-group-item list-group-item-action bg-transparent text-white">Wishlist</a>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="col-md-9" data-aos="fade-left">
+            <div class="p-4 rounded-3" style="background: rgba(255,255,255,0.05);">
+                <h3>Hello, {{ user.fullname}}!</h3>
+                <p class="text-white-50">From your account dashboard you can view your recent orders, manage your shipping and billing addresses.</p>
+                <div class="row mt-4">
+                    <div class="col-md-4"><div class="p-3 bg-dark rounded text-center"><h5>{{ total_orders }} Orders</h5></div></div>
+                    <div class="col-md-4"><div class="p-3 bg-dark rounded text-center"><h5>{{total_like}}</h5></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

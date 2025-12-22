@@ -1,0 +1,112 @@
+{% extends 'admin_base.html' %}
+{% block page_title %}Edit Product{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="text-info">Product ID: #PRD-{{ product.id }}</h5>
+                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Delete Product</button>
+            </div>
+
+            <form action="{% url 'update_product' product.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <!-- Image Side -->
+                    <div class="col-md-4 text-center mb-4">
+                        <label class="form-label d-block text-start">Current Image</label>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="img-fluid rounded border border-secondary mb-3">
+                        {% endif %}
+                        <label class="btn btn-outline-info w-100">
+                            <i class="bi bi-upload"></i> Change Image
+                            <input type="file" name="image" hidden>
+                        </label>
+                    </div>
+
+                    <!-- Details Side -->
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" name="title" class="form-control form-control-dark" value="{{product.title}}" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Price ($)</label>
+                                <input type="number" name="price" step="0.01" class="form-control form-control-dark" value="{{product.price}}" required>
+                            </div>
+                            <!-- મેં અહીં Stock Quantity પણ ઉમેર્યું છે જે ખૂટતું હતું -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Stock Quantity</label>
+                                <input type="number" name="stock" class="form-control form-control-dark" value="{{product.stock}}" required>
+                            </div>
+                        </div>
+
+                        <!-- નવું ઉમેરેલું Category Section -->
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select form-control-dark">
+                                <option value="Gaming Laptop" {% if product.category == 'Gaming Laptop' %}selected{% endif %}>Gaming Laptop</option>
+                                <option value="Ultrabook" {% if product.category == 'Ultrabook' %}selected{% endif %}>Ultrabook</option>
+                                <option value="MacBook" {% if product.category == 'MacBook' %}selected{% endif %}>MacBook</option>
+                                <option value="Business Laptop" {% if product.category == 'Business Laptop' %}selected{% endif %}>Business Laptop</option>
+                                <option value="Student Laptop" {% if product.category == 'Student Laptop' %}selected{% endif %}>Student Laptop</option>
+                                <option value="Workstation Laptop" {% if product.category == 'Workstation Laptop' %}selected{% endif %}>Workstation Laptop</option>
+                                <option value="2-in-1 Laptop" {% if product.category == '2-in-1 Laptop' %}selected{% endif %}>2-in-1 Laptop</option>
+                                <option value="Convertible Laptop" {% if product.category == 'Convertible Laptop' %}selected{% endif %}>Convertible Laptop</option>
+                                <option value="Budget Laptop" {% if product.category == 'Budget Laptop' %}selected{% endif %}>Budget Laptop</option>
+                                <option value="Premium Laptop" {% if product.category == 'Premium Laptop' %}selected{% endif %}>Premium Laptop</option>
+                                <option value="Chromebook" {% if product.category == 'Chromebook' %}selected{% endif %}>Chromebook</option>
+                                <option value="Creator Laptop" {% if product.category == 'Creator Laptop' %}selected{% endif %}>Creator Laptop</option>
+                                <option value="AI Laptop" {% if product.category == 'AI Laptop' %}selected{% endif %}>AI Laptop</option>
+                                <option value="Touchscreen Laptop" {% if product.category == 'Touchscreen Laptop' %}selected{% endif %}>Touchscreen Laptop</option>
+                                <option value="Thin & Light Laptop" {% if product.category == 'Thin & Light Laptop' %}selected{% endif %}>Thin & Light Laptop</option>
+                                <option value="Rugged Laptop" {% if product.category == 'Rugged Laptop' %}selected{% endif %}>Rugged Laptop</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Processor</label>
+                                <input type="text" name="processor" class="form-control form-control-dark" value="{{product.processor}}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">RAM</label>
+                                <input type="text" name="ram" class="form-control form-control-dark" value="{{product.ram}}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label">Storage</label>
+                                <input type="text" name="storage" class="form-control form-control-dark" value="{{product.storage}}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Graphics</label>
+                                <input type="text" name="graphics" class="form-control form-control-dark" value="{{product.graphics}}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Display</label>
+                            <input type="text" name="display" class="form-control form-control-dark" value="{{product.display}}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control form-control-dark" rows="4" required>{{product.description}}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{% url 'products' %}" class="btn btn-outline-light">Cancel</a>
+                            <button type="submit" class="btn btn-info fw-bold px-4">Update Product</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

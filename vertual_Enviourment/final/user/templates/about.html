@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}About Us{% endblock %}
+{% block content %}
+{% load static %}
+
+<style>
+    /* મેઈન ઈમેજ માટે */
+    .about-img {
+        height: 430px;              
+        width: 100%;
+        object-fit: contain;      
+        object-position: top;       
+        background-color: #000;     
+    }
+
+    /* ટીમ કાર્ડ માટે સ્પેશિયલ CSS */
+    .team-card {
+        transition: transform 0.3s ease;
+        height: 100%; /* બધા કાર્ડની હાઈટ સરખી રાખશે */
+    }
+    
+    .team-card:hover {
+        transform: translateY(-5px);
+        border-color: #0dcaf0 !important; /* હોવર પર બોર્ડર કલર */
+    }
+
+    /* ટીમ મેમ્બરના ફોટા માટે ફિક્સ સાઈઝ */
+    .team-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover; /* ફોટો કપાય પણ ચપટો ન થાય */
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        padding: 3px;
+    }
+</style>
+
+<div class="container py-5 mt-5">
+    
+    <!-- Hero Section -->
+   <div class="row align-items-center mb-5">
+    <div class="col-md-6" data-aos="fade-right">
+        <h1 class="fw-bold">We Are <span class="text-info">TechBeast</span></h1>
+        <p class="lead text-white-50">
+            This website is proudly developed by <strong><b> Sanatani Bhatt Ji</b></strong>.
+        </p>
+        <p>
+            I am a Python Backend Developer, and this platform is built using the
+            <strong>Django framework</strong>. TechBeast was designed and developed
+            within a duration of <strong>5 days</strong>, focusing on performance,
+            clean architecture, and a smooth user experience.
+        </p>
+        <p>
+            The goal of this project is to deliver a modern, secure, and scalable
+            eCommerce experience with powerful backend logic and a premium UI.
+        </p>
+    </div>
+    <div class="col-md-6" data-aos="fade-left">
+        <img src="/static/user/bhudev.jpg" class="img-fluid rounded-4 shadow-lg about-img" alt="Sanatani Bhatt Ji">
+    </div>
+</div>
+    <!-- Team Section -->
+    <h2 class="text-center mb-5 fw-bold text-uppercase">Our Team</h2>
+    
+    <!-- g-4 થી કાર્ડ વચ્ચે જગ્યા રહેશે -->
+    <div class="row g-4 justify-content-center"> 
+        
+        <!-- Member 1 -->
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="p-4 rounded-3 bg-dark border border-secondary team-card text-center">
+                <img src="/static/user/RK.jpg" class="rounded-circle mb-3 team-img">
+                <h4 class="mb-1">Ravi Khalnayak</h4>
+                <p class="text-info small mb-0">UI/UX Designer</p>
+            </div>
+        </div>
+
+        <!-- Member 2 -->
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="p-4 rounded-3 bg-dark border border-secondary team-card text-center">
+                <img src="/static/user/MJ.jpg" class="rounded-circle mb-3 team-img">
+                <h4 class="mb-1">Jadeja 😈</h4>
+                <p class="text-info small mb-0">Frontend Expert</p>
+            </div>
+        </div>
+
+        <!-- Member 3 -->
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="p-4 rounded-3 bg-dark border border-secondary team-card text-center">
+                <img src="/static/user/KM.jpg" class="rounded-circle mb-3 team-img">
+                <h4 class="mb-1">Krunal badmos</h4>
+                <p class="text-info small mb-0">Frontend Artist</p>
+            </div>
+        </div>
+
+        <!-- Member 4 -->
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="p-4 rounded-3 bg-dark border border-secondary team-card text-center">
+                <img src="/static/user/mya.png" class="rounded-circle mb-3 team-img">
+                <h4 class="mb-1">Ben 🥹</h4>
+                <p class="text-info small mb-0">All rounder</p>
+            </div>
+        </div>
+       
+    </div>
+</div>
+{% endblock %}

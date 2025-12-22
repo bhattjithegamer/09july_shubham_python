@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Careers{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h1 class="fw-bold">Join Our Team</h1>
+        <p class="text-white-50">Build the future of tech e-commerce with us.</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        <!-- Job 1 -->
+        <div class="col-lg-8" data-aos="fade-up">
+            <div class="p-4 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                    <h4>Frontend Developer</h4>
+                    <p class="mb-0 text-white-50"><i class="bi bi-geo-alt"></i> Remote | <i class="bi bi-clock"></i> Full Time</p>
+                </div>
+                <button class="btn btn-info rounded-pill text-white fw-bold">Apply Now</button>
+            </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="p-4 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                    <h4>Product Manager</h4>
+                    <p class="mb-0 text-white-50"><i class="bi bi-geo-alt"></i> New York | <i class="bi bi-clock"></i> Full Time</p>
+                </div>
+                <button class="btn btn-info rounded-pill text-white fw-bold">Apply Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
