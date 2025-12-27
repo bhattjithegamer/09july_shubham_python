@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Order Details{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">Order #{{ order.id }} Details</h2>
+        <a href="{% url 'orders' %}" class="btn btn-outline-light">Back to Orders</a>
+    </div>
+
+    <div class="card bg-dark text-white border-secondary">
+        <div class="card-header border-secondary">
+            <strong>Order Date:</strong> {{ order.created_at }} | 
+            <strong>Status:</strong> <span class="badge bg-info">{{ order.status }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in items %}
+                        <tr>
+                            <td>{{ i.product.title }}</td> <!-- જો મોડેલમાં product.name હોય તો તે લખવું -->
+                            <td>₹{{ i.price }}</td>
+                            <td>{{ i.quantity }}</td>
+                            <td class="text-end">₹{{ i.get_total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr class="border-secondary">
+            <h3 class="text-end">Grand Total: ₹{{ order.total_amount }}</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

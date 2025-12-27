@@ -22,7 +22,7 @@
                     <td>{{ order.created_at }}</td>
                     <td><span class="badge bg-success bg-opacity-75">Delivered</span></td>
                     <td>{{ order.total_amount }}</td>
-                    <td class="text-end pe-4"><a href="#" class="btn btn-sm btn-outline-light">View</a></td>
+                    <td class="text-end pe-4"><a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-light">View</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

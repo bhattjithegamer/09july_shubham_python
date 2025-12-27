@@ -30,7 +30,7 @@
             background-color: #0f2027; 
         }
 
-        /* 🔥 3D Iframe Background Container */
+        /* 🔥 3D Iframe Background Container (Global) */
         #canvas-container {
             position: fixed;
             top: 0;
@@ -38,25 +38,16 @@
             width: 100%;
             height: 100%;
             z-index: -1; /* Behind all content */
-            overflow: hidden; /* Logo cut karva mate aa jaruri che */
+            overflow: hidden; 
         }
 
-        /* 
-           🔥 LOGO REMOVER HACK 
-           Iframe ne thodu motu (Zoom) karyu che jethi 
-           "Built with Spline" logo screen ni bahar jato rahe.
-        */
         #canvas-container iframe {
             width: 100%;
             height: 100%;
             border: none;
             display: block;
-            
-            /* Zoom in 15% to push logo off-screen */
             transform: scale(1.25); 
             transform-origin: center center;
-            
-            /* Pointer events chalu rakhya che jethi mouse thi move thai sake */
             pointer-events: auto; 
         }
 
@@ -78,12 +69,53 @@
             z-index: 1; 
         }
 
+        /* 🔥 Modified Footer Styles */
         footer {
-            background: rgba(0, 0, 0, 0.8) !important;
+            background: rgba(0, 0, 0, 0.85) !important; /* Slightly darker to make text readable */
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(255,255,255,0.1);
             position: relative;
             z-index: 1;
+            overflow: hidden; /* Important for containing the 3D BG */
+            padding-top: 3rem;
+        }
+
+        /* Footer 3D Background Container */
+        .footer-3d-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind footer content */
+            opacity: 0.4; /* Low opacity so text pops out */
+            pointer-events: none; /* User clicks pass through to links */
+        }
+
+        .footer-3d-bg iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(1.2); /* Zoom to remove logos */
+        }
+
+        /* Footer Links Styling */
+        .footer-content {
+            position: relative;
+            z-index: 2; /* Keep text above animation */
+        }
+        
+        .footer-link {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        
+        .footer-link:hover {
+            color: #00bfff;
+            transform: translateX(5px);
         }
 
         /* Scrollbar */
@@ -95,7 +127,7 @@
 </head>
 <body>
     
-    <!-- 🔥 Spline 3D Background -->
+    <!-- 🔥 Spline 3D Background (Main Body) -->
     <div id="canvas-container">
         <iframe src='https://my.spline.design/boxeshover-c3uaVujM619fK0i0bh7vA61D/' frameborder='0'></iframe>
     </div>
@@ -162,10 +194,70 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer class="text-white text-center py-4 mt-5">
-        <div class="container">
-            <p class="mb-0 text-white-50">&copy; 2024 TechBeast. All Rights Reserved.</p>
+    <!-- 🔥 Footer with Links & Separate 3D Animation -->
+    <footer class="text-white mt-5">
+        
+        <!-- 🔥 Footer Specific 3D Background -->
+        <div class="footer-3d-bg">
+            <!-- Using a different, subtle abstract Spline scene for footer -->
+            <iframe src='https://my.spline.design/gradientwaves-c3uaVujM619fK0i0bh7vA61D/' frameborder='0'></iframe>
+        </div>
+
+        <div class="container footer-content">
+            <div class="row g-4">
+                
+                <!-- Column 1: Brand Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="fw-bold text-info mb-3"><i class="bi bi-laptop"></i> TechBeast</h4>
+                    <p class="text-white-50">
+                        The ultimate destination for high-performance laptops and gaming gears. 
+                        Experience power like never before.
+                    </p>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'index' %}" class="footer-link">Home</a></li>
+                        <li><a href="{% url 'shop' %}" class="footer-link">Shop</a></li>
+                        <li><a href="{% url 'cart' %}" class="footer-link">My Cart</a></li>
+                        <li><a href="{% url 'orders' %}" class="footer-link">Orders</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Explore -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h5 class="fw-bold mb-3">Explore</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'about' %}" class="footer-link">About Us</a></li>
+                        <li><a href="{% url 'blog' %}" class="footer-link">Latest Blogs</a></li>
+                        <li><a href="{% url 'gallery' %}" class="footer-link">Gallery</a></li>
+                        <li><a href="{% url 'contact' %}" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Contact Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="fw-bold mb-3">Contact Us</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill text-info me-2"></i> Gangster State Gujrat, India</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill text-info me-2"></i> gamerbhattji@gmail.com</li>
+                        <li class="mb-2"><i class="bi bi-telephone-fill text-info me-2"></i> +91 88664 40478</li>
+                    </ul>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="/contact/" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+                        
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="border-secondary my-4">
+            
+            <div class="text-center pb-4">
+                <p class="mb-0 text-white-50">&copy; 2024 TechBeast. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 

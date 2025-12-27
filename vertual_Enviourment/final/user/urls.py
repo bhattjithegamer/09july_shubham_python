@@ -39,6 +39,8 @@ urlpatterns = [
     # Legal Pages
     path('terms/', views.terms, name='terms'),
     path('privacy-policy/', views.privacy_policy, name='privacy-policy'),
+    path('otp_ver/', views.otp_ver, name='otp_ver'),
+
 
     # Extra Pages (Dynamic pan banavi sakay, pan atyare static rakhiye)
     path('page-1/', views.page_1, name='page-1'),
@@ -48,4 +50,6 @@ urlpatterns = [
     path('page-5/', views.page_5, name='page-5'),
     path('product/<int:id>/', views.product_details, name='product_details'),
     path('delete_cart/<int:id>/', views.delete_cart, name='delete_cart'),
+    path('order-detail/<int:id>/', views.order_detail, name='order_detail'),
+
 ]

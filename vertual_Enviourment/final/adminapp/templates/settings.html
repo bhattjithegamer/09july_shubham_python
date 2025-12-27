@@ -4,7 +4,11 @@
 {% block content %}
 <div class="glass-card">
     <h5 class="mb-4 text-info">General Settings</h5>
-    <form>
+    
+    <!-- અહીં method="POST" ખાસ લખવું -->
+    <form method="POST">
+        {% csrf_token %}
+        
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" checked>
             <label class="form-check-label">Enable New User Registration</label>
@@ -13,11 +17,25 @@
             <input class="form-check-input" type="checkbox" checked>
             <label class="form-check-label">Email Notifications</label>
         </div>
-        <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox">
-            <label class="form-check-label">Maintenance Mode</label>
+        
+        <hr class="bg-secondary my-4">
+        
+        <!-- કલર બદલવા માટેનું સેક્શન -->
+        <h5 class="mb-3 text-warning">Theme Settings</h5>
+        <div class="mb-3">
+            <label class="form-label text-white">Background Color</label>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Color Input -->
+                <input type="color" name="bg_color" 
+                       class="form-control form-control-color" 
+                       value="{{ request.session.admin_bg_color|default:'#1a1a2e' }}" 
+                       title="Choose your color">
+                
+                <span class="text-muted small">Select a color for the dashboard background.</span>
+            </div>
         </div>
-        <button class="btn btn-primary mt-3">Save Changes</button>
+
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
     </form>
 </div>
 {% endblock %}

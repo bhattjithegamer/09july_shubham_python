@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}OTP Verification{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg border-0"
+         style="max-width: 420px; width:100%;
+                background: rgba(0,0,0,0.7);
+                backdrop-filter: blur(15px);
+                border-radius: 20px;"
+         data-aos="zoom-in">
+
+        <div class="card-body p-5 text-center">
+
+            <h3 class="fw-bold text-info mb-3">
+                <i class="bi bi-shield-lock"></i> OTP Verification
+            </h3>
+
+            <p class="text-white-50 mb-4">
+                Please enter the OTP sent to your email
+            </p>
+
+            {% if msg %}
+            <div class="alert alert-danger py-2">
+                {{ msg }}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <input type="text"
+                           name="otp"
+                           class="form-control text-center fs-4 fw-bold rounded-pill"
+                           placeholder="Enter OTP"
+                           maxlength="6"
+                           required>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-info w-100 rounded-pill fw-bold py-2">
+                    Verify OTP
+                </button>
+            </form>
+
+            <div class="mt-4">
+                <small class="text-white-50">
+                    Didn’t receive OTP?
+                    <a href="#" class="text-info text-decoration-none">Resend</a>
+                </small>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

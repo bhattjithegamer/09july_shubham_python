@@ -7,7 +7,7 @@ class user_register(models.Model):
     fullname=models.CharField(max_length=100)
     email=models.EmailField()
     password=models.CharField(max_length=100)
-    created_at=models.DateTimeField(auto_now_add=True,null=True)
+    created_at=models.DateTimeField(auto_now_add=True)
 
 class Cart(models.Model):
     user = models.ForeignKey(user_register, on_delete=models.CASCADE)
@@ -20,6 +20,7 @@ class contact_cls(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=200)
     message = models.TextField() 
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
 
 class payment_cls(models.Model):
     user = models.ForeignKey(user_register, on_delete=models.CASCADE)
@@ -33,4 +34,13 @@ class payment_cls(models.Model):
 
 class wishlist(models.Model):
     user = models.ForeignKey(user_register, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+class orderitem_cls(models.Model):
+    order = models.ForeignKey(payment_cls, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.IntegerField() 
+
+    def get_total(self):
+        return self.quantity * self.price

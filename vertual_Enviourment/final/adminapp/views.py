@@ -19,12 +19,14 @@ def dashboard(request):
     user = user_register.objects.all()
     products = Product.objects.all()
     sale = payment_cls.objects.all()
+    message = contact_cls.objects.all()
 
     total_user = len(user)
     total_product = len(products)
     total_sale = len(sale)
+    total_message = len(message)
     order = payment_cls.objects.all().order_by('-id')
-    return render(request, "dashboard.html", {"total_user": total_user, "total_product": total_product, "total_sale": total_sale, "order": order})
+    return render(request, "dashboard.html", {"total_user": total_user, "total_product": total_product, "total_sale": total_sale, "order": order,"total_message":total_message})
 
 def products(request):
     products = Product.objects.all()
@@ -99,3 +101,13 @@ def delete_contact(request, id):
     contact = get_object_or_404(contact_cls, id=id)
     contact.delete()
     return redirect('admin_contact_list')
+
+def admin_settings(request):
+    if request.method == 'POST':
+        color = request.POST.get('bg_color') # HTML માંથી કલર લાવો
+        
+        request.session['admin_bg_color'] = color 
+        
+        return redirect('admin_settings') # પેજ રિફ્રેશ કરો
+
+    return render(request, 'admin_settings.html')

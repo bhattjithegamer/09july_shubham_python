@@ -3,7 +3,10 @@ from .forms import *
 from adminapp.models import *
 from django.contrib import messages
 from .models import *
-from .models import Product, Cart, wishlist as WishlistModel  
+from .models import Product, Cart, wishlist as WishlistModel 
+import random 
+from django.core.mail import send_mail
+from django.conf import settings
 
 def index(request):
     products = Product.objects.all()
@@ -22,12 +25,11 @@ def contact(request):
 
 def shop(request):
     products = Product.objects.all()
-    uid = request.session.get('user_id')
+    user_id = request.session.get('user_id')
     wishlist_ids = []
 
-    if uid:
-        # અહી wishlist.objects ને બદલે WishlistModel.objects લખો
-        wishlist_ids = list(WishlistModel.objects.filter(user_id=uid).values_list('product_id', flat=True))
+    if user_id:
+        wishlist_ids = list(WishlistModel.objects.filter(user_id=user_id).values_list('product_id', flat=True))
 
     return render(request, 'shop.html', {'products': products, 'wishlist_ids': wishlist_ids})
 
@@ -36,8 +38,14 @@ def product(request):
     return render(request, 'product.html',{'products': products})
 
 def product_details(request, id):
-    product = get_object_or_404(Product, id=id) # ID પરથી એક પ્રોડક્ટ શોધો
+    product = get_object_or_404(Product, id=id) 
     return render(request, 'product.html', {'products': [product]})
+
+def order_detail(request, id):
+    order_obj  = get_object_or_404(payment_cls, id=id)
+    items = orderitem_cls.objects.filter(order=order_obj) 
+
+    return render(request, 'order_detail.html', {'order': order_obj, 'items': items})
 
 def cart(request):
     user_id = request.session.get('user_id')
@@ -78,31 +86,37 @@ def add_to_cart(request, id):
     return redirect('cart')
 
 def checkout(request):
-    u_id = request.session.get('user_id')
-    if not u_id: return redirect('login')
+    user_id = request.session.get('user_id')
+    if not user_id: 
+        return redirect('login')
 
-    # ડાયરેક્ટ ID થી ફિલ્ટર કરો, ઓબ્જેક્ટ લાવવાની જરૂર નથી
-    items = Cart.objects.filter(user_id=u_id)
+    items = Cart.objects.filter(user_id=user_id)
     total = sum(i.product.price * i.quantity for i in items)
 
     if request.method == 'POST':
         form = payment_form(request.POST)
         if form.is_valid():
             pay = form.save(commit=False)
-            pay.user_id = u_id
+            pay.user_id = user_id
             pay.total_amount = total
             method = request.POST.get('payment_method')
 
-            # --- SMART LOGIC (High Short) ---
-            pay.cash_on_delivery = (method == 'cod') # True/False automatic set થશે
+            pay.cash_on_delivery = (method == 'cod')
             
-            # જો કાર્ડ ન હોય તો કાર્ડની વિગતો સાફ કરો
             if method != 'card': pay.debit_card_number = pay.mm_yy = pay.cvv = None
-            # જો UPI ન હોય તો UPI ID સાફ કરો
             if method != 'upi': pay.upi_id = None
             
-            pay.save()
-            items.delete() # કાર્ટ ખાલી
+            pay.save() 
+
+            for item in items:
+                orderitem_cls.objects.create(
+                    order=pay,                
+                    product=item.product,     
+                    quantity=item.quantity,   
+                    price=item.product.price  
+                )
+
+            items.delete() 
             return render(request, 'checkout.html', {'success': True})
 
     return render(request, 'checkout.html', {'total': total})
@@ -122,25 +136,52 @@ def login_page(request):
     return render(request, 'login.html')
 
 def register(request):
-    msg=""
+    msg = ""
     if request.method == 'POST':
         email = request.POST.get('email')
 
         if user_register.objects.filter(email=email).exists():
-            msg = "Email already exists plese login"
+            msg = "Email already exists, please login"
             return render(request, 'register.html', {'msg': msg})
 
         form = user_register_form(request.POST)
         if form.is_valid():
-            user=form.save()
-            request.session['user_id'] = user.id
-            msg = "User Registered Successfully"
-            return redirect('login')
+            user = form.save()
+
+            otp = random.randint(1111, 9999)
+
+            sub = "Your OTP for Verification"
+            mail_msg = f"Dear User,\n\nYour OTP is {otp}.\n\nRegards,\nNotesApp Team Bhattji"
+            
+            try:
+                send_mail(sub, mail_msg, settings.EMAIL_HOST_USER, [email])
+                
+                request.session['otp'] = otp
+                request.session['email'] = email 
+                
+                return redirect('otp_ver') # Tamaru URL name check kari lejo
+            except Exception as e:
+                msg = "Network Error. Please try again."
         else:
-            print("Form is not valid")
+            msg = "Invalid Form Data"
+
     return render(request, 'register.html', {'msg': msg})
 
-# Short ma baki badha mate pan same pattern follow karjo:
+def otp_ver(request):
+    msg = ""
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        generated_otp = request.session.get('otp') # Session mathi OTP lavo
+
+        if str(entered_otp) == str(generated_otp):
+            # Verification Successful
+            del request.session['otp'] # Session clear karo
+            return redirect('login')
+        else:
+            msg = "Invalid OTP. Please try again."
+    
+    return render(request, 'otp_ver.html', {'msg': msg})
+
 def blog(request): 
     return render(request, 'blog.html')
 
@@ -176,8 +217,8 @@ def product_3d_viewer(request):
     return render(request, 'product-3d-viewer.html')
 
 def profile(request): 
-    like = wishlist.objects.all()
-    orders = payment_cls.objects.all()
+    like = wishlist.objects.filter(user_id=user_id)
+    orders = payment_cls.objects.filter(user_id=user_id)
 
     total_like = len(like)
     total_orders = len(orders)
@@ -197,23 +238,23 @@ def terms(request):
 
 # આ ફંક્શનનું નામ 'wishlist' ન હોવું જોઈએ, 'wishlist_page' રાખો
 def wishlist_page(request):
-    uid = request.session.get('user_id')
-    if not uid: return redirect('login')
+    user_id = request.session.get('user_id')
+    if not user_id: 
+        return redirect('login')
     
-    # અહી પણ WishlistModel વાપરો
-    w_items = WishlistModel.objects.filter(user_id=uid) 
+    w_items = WishlistModel.objects.filter(user_id=user_id) 
     return render(request, 'wishlist.html', {'w_items': w_items})
 
 def toggle_wishlist(request, pid):
-    uid = request.session.get('user_id')
-    if not uid: return redirect('login')
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
 
-    # અહી પણ WishlistModel વાપરો
-    item = WishlistModel.objects.filter(user_id=uid, product_id=pid)
+    item = WishlistModel.objects.filter(user_id=user_id, product_id=pid)
     if item.exists():
         item.delete()
     else:
-        WishlistModel.objects.create(user_id=uid, product_id=pid)
+        WishlistModel.objects.create(user_id=user_id, product_id=pid)
     
     return redirect(request.META.get('HTTP_REFERER', '/'))
 def page_1(request): 

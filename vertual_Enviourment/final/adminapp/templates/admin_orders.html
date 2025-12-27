@@ -15,7 +15,7 @@
                     <th>Payment Method</th>
                     <th>Payment Details</th>
                     <th>Date</th>
-                    <th>Action</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -62,9 +62,7 @@
                     <td>{{ order.created_at|date:"d M Y" }}</td>
 
                     <!-- Action Button -->
-                    <td>
-                        <button class="btn btn-sm btn-outline-info">View Details</button>
-                    </td>
+                    
                 </tr>
                 {% empty %}
                 <tr>
