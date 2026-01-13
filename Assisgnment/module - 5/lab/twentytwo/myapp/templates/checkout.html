@@ -1,0 +1,8 @@
+<div class="card shadow p-4 text-center">
+    <h2>Complete Your Payment</h2>
+    <p>Amount: $20.00</p>
+    <form action="{% url 'create_checkout_session' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-lg">Pay with Card</button>
+    </form>
+</div>

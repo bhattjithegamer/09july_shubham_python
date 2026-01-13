@@ -1,0 +1,5 @@
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="phone" placeholder="+919876543210" required>
+    <button type="submit">Send OTP</button>
+</form>

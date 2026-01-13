@@ -1,0 +1,6 @@
+<form method="POST" action="{% url 'verify_otp' %}">
+    {% csrf_token %}
+    <input type="hidden" name="phone" value="{{ phone }}">
+    <input type="text" name="otp" placeholder="Enter 6-digit code" required>
+    <button type="submit">Verify Now</button>
+</form>
