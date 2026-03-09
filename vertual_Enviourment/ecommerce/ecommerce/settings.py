@@ -135,10 +135,15 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
 ]
 
+# settings.py માં શોધો અથવા ઉમેરો
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # આ લાઈન હોવી જોઈએ
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 RAZORPAY_KEY_ID = "rzp_test_dummy1234567890"
@@ -153,10 +158,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 from datetime import timedelta
 
 # SimpleJWT ના સમય મર્યાદા વધારવા માટે
+# settings.py માં
+from datetime import timedelta
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),  
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30), 
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Access token 1 દિવસ ચાલશે
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # Refresh token 7 દિવસ ચાલશે
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'AUTH_HEADER_TYPES': ('Bearer',),            # અહિયાં Bearer હોવું જરૂરી છે
 }
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization", # આ હોવું જ જોઈએ
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]

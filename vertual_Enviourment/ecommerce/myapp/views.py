@@ -10,6 +10,7 @@ from .serializers import RegisterSerializer
 import uuid
 from django.conf import settings
 from .models import Product, Order
+from django.db import transaction
 
 
 def get_tokens_for_user(user):
@@ -31,6 +32,8 @@ def get_products(request):
             'name': p.name,
             'price': p.price,
             'description': p.description,
+            'category': p.category,
+            'stock': p.stock,  # ← આ લાઇન ખાસ ઉમેરો, આના વગર "Out of Stock" જ બતાવશે
             'image': request.build_absolute_uri(p.image.url) if p.image else None
         })
     return Response(data, status=status.HTTP_200_OK)
@@ -144,6 +147,8 @@ def create_payment_order(request):
 
 
 # --- PAYMENT SUCCESS ---
+# views.py માં handle_payment_success ફંક્શન આ રીતે બદલો:
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def handle_payment_success(request):
@@ -154,16 +159,41 @@ def handle_payment_success(request):
         return Response({'error': 'Missing order ID.'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        order = Order.objects.get(order_id=order_id)
+        # Atomic transaction વાપરવું જેથી જો એક પણ પ્રોડક્ટમાં પ્રોબ્લેમ આવે તો સ્ટોક ના ઘટે
+        with transaction.atomic():
+            order = Order.objects.select_for_update().get(order_id=order_id)
+            
+            if order.is_paid:
+                return Response({'message': 'Already paid.'})
+
+            # ૧. ઓર્ડરને પેઇડ માર્ક કરો
+            order.payment_id = payment_id or f"pay_DUMMY_{uuid.uuid4().hex[:14].upper()}"
+            order.is_paid = True
+            order.save()
+
+            # ૨. સ્ટોક ઘટાડવાનું લોજિક (Order ના items માંથી)
+            for item in order.items:
+                p_id = item.get('id')
+                qty = int(item.get('quantity', 1))
+
+                if p_id:
+                    try:
+                        product = Product.objects.select_for_update().get(id=p_id)
+                        if product.stock >= qty:
+                            product.stock -= qty
+                            product.save()
+                        else:
+                            # જો સ્ટોક ઓછો હોય તો તમે અહીં એરર આપી શકો અથવા લોગ કરી શકો
+                            print(f"Low stock for {product.name}")
+                    except Product.DoesNotExist:
+                        print(f"Product ID {p_id} not found")
+
+            return Response({'message': 'Payment verified and stock updated!'}, status=status.HTTP_200_OK)
+
     except Order.DoesNotExist:
         return Response({'error': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-    order.payment_id = payment_id or f"pay_DUMMY_{uuid.uuid4().hex[:14].upper()}"
-    order.is_paid = True
-    order.save()
-
-    return Response({'message': 'Payment verified and order confirmed!'}, status=status.HTTP_200_OK)
-
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 # --- PAYMENT FAILURE ---
 @api_view(['POST'])
@@ -214,3 +244,45 @@ def custom_login(request):
         'refresh': tokens['refresh'],
         'is_admin': user.is_staff or user.is_superuser,
     })
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def place_order(request):
+    user = request.user
+    cart_items = request.data.get('items', []) # ફ્રન્ટએન્ડમાંથી આવેલી કાર્ટ આઈટમ્સ
+    total_amount = request.data.get('total_amount')
+
+    # Atomic Transaction વાપરવું સારું છે જેથી જો એક પ્રોડક્ટમાં ભૂલ આવે તો આખો ઓર્ડર કેન્સલ થાય
+    try:
+        with transaction.atomic():
+            # ૧. નવો ઓર્ડર બનાવો
+            order = Order.objects.create(
+                user=user,
+                total_amount=total_amount,
+                items=cart_items,
+                is_paid=True # અથવા પેમેન્ટ વેરિફાઈ થયા પછી
+            )
+
+            # ૨. સ્ટોક ઓછો કરવાનું લોજિક
+            for item in cart_items:
+                product_id = item.get('id')
+                quantity_bought = int(item.get('quantity', 1))
+
+                # પ્રોડક્ટ મેળવો
+                product = Product.objects.select_for_update().get(id=product_id)
+
+                # સ્ટોક ચેક કરો અને ઓછો કરો
+                if product.stock >= quantity_bought:
+                    product.stock -= quantity_bought
+                    product.save()
+                else:
+                    # જો સ્ટોક ના હોય તો એરર આપો
+                    raise Exception(f"Sorry, {product.name} is out of stock!")
+
+            return Response({"message": "Order placed and stock updated!"}, status=201)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)

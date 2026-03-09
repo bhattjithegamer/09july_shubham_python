@@ -1,0 +1,7 @@
+node_modules/
+vertual_Enviourment/
+.env
+*.pyc
+__pycache__/
+dist/
+build/
