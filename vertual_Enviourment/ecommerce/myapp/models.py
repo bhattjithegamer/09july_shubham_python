@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Product(models.Model):
-    # આપણે નક્કી કરેલી કેટેગરીઝ
     CATEGORY_CHOICES = [
         ('Elite Laptops', 'Elite Laptops'),
         ('Mechanical Keyboards', 'Mechanical Keyboards'),
@@ -12,7 +11,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=200)
     stock = models.PositiveIntegerField(default=0)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Elite Laptops') # આ નવું ઉમેરો
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Elite Laptops')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     image = models.ImageField(upload_to='products/', null=True, blank=True)
@@ -48,7 +47,6 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    # ✅ આ લાઇન નવી ઉમેરો
     status = models.CharField(
         max_length=20, 
         default='Pending',
@@ -63,3 +61,4 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
+

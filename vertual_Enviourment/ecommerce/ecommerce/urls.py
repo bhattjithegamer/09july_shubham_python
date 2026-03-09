@@ -15,6 +15,7 @@ from myapp.views import (
     handle_payment_failure,
     get_product_details,
     custom_login,
+    clear_order_history,
 )
 
 urlpatterns = [
@@ -23,7 +24,7 @@ urlpatterns = [
 
     # AUTH
     path('api/register/', register_user, name='register'),
-    path('api/login/', custom_login, name='login'),          # ← custom_login (is_admin return કરે)
+    path('api/login/', custom_login, name='login'),          # ← custom_login (is_admin return )
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/google-login/', google_login, name='google_login'),
 
@@ -33,6 +34,7 @@ urlpatterns = [
 
     # ORDERS
     path('api/orders/', get_user_orders, name='user_orders'),
+    path('api/orders/clear/', clear_order_history),
 
     # PAYMENTS
     path('api/create-payment/', create_payment_order, name='create_payment'),
