@@ -22,7 +22,7 @@ Nexus Tech is a high-performance, specialized e-commerce platform designed for t
 ### 🛒 Customer Experience
 
 - **Premium Catalog:** Specialized categories like Elite Laptops, Mechanical Keyboards, and Pro Peripherals.
-- **Secure Authentication:** Dual support for Custom Email/Password and Google Social Login.
+- **Secure Authentication:** Dual support for Custom Email/Password and Google Social Login , You will still have to log in after registering.
 - **Smart Shopping Cart:** Real-time stock validation and persistent cart experience.
 - **Secure Payments:** Seamless Razorpay integration for safe and fast checkout.
 - **Order Tracking:** Detailed order history with lifecycle status (Pending → Shipped → Delivered).
