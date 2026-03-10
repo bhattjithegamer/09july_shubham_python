@@ -1,16 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* images સેટિંગ્સ - જેથી Render પરથી ફોટા દેખાય */
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'ecommerce-backend-pgyl.onrender.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', // આ લાઈન તેં નવી ઉમેરી
+      },
     ],
   },
-  /* headers સેટિંગ્સ - જેથી Google Login નું પોપ-અપ બ્લોક ના થાય */
   async headers() {
     return [
       {
