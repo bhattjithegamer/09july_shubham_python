@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve 
+from django.urls import re_path 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from myapp.views import (
     get_products,
@@ -46,6 +48,8 @@ urlpatterns = [
 
     # DASHBOARD (admin panel APIs) — 'api/stats/' prefix
     path('api/stats/', include('dashboard.urls')),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
 ]
 
 if settings.DEBUG:
