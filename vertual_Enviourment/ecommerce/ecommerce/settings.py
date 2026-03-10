@@ -102,6 +102,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://09july-shubham-python.vercel.app",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://09july-shubham-python.vercel.app",
+    "https://ecommerce-backend-pgyl.onrender.com",
 ]
 
 CORS_ALLOW_HEADERS = [
