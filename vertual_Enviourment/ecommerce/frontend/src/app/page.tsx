@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ShoppingCart, ShoppingBag, ShieldCheck, Box } from "lucide-react";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://https://ecommerce-backend-pgyl.onrender.com";
 
 interface Product {
   id: number;

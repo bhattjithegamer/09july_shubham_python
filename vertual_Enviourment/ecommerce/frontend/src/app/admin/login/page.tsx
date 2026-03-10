@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, Eye, EyeOff, Lock, User, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://https://ecommerce-backend-pgyl.onrender.com";
 
 export default function AdminLoginPage() {
   const router = useRouter();

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, Settings, Check, X, Loader2, ShoppingBag, CheckCircle, Clock, Package, Trash2 } from "lucide-react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://https://ecommerce-backend-pgyl.onrender.com";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
