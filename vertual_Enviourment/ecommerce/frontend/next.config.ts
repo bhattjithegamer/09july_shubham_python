@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com', // આ લાઈન તેં નવી ઉમેરી
+        hostname: 'res.cloudinary.com', 
       },
     ],
   },
