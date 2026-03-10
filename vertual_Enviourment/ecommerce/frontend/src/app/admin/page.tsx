@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { DollarSign, Package, ShoppingBasket, CheckCircle, Flame } from 'lucide-react';
+import { useRouter } from 'next/navigation'; 
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
@@ -28,6 +29,7 @@ const BAR_COLORS = [
 ];
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,9 +37,29 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token");
+        
+        if (!token) {
+          window.location.href = "/login"; 
+          return;
+        }
+
         const res = await fetch(`${API}/api/stats/stats/`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
         });
+
+        if (res.status === 401) {
+          console.error("Session expired or invalid token.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("is_admin");
+          window.location.href = "/login"; 
+          return;
+        }
+
+        if (!res.ok) throw new Error("Failed to fetch stats");
+
         const data = await res.json();
         setStats(data);
       } catch (err) {
@@ -46,6 +68,7 @@ export default function AdminDashboard() {
         setLoading(false);
       }
     };
+
     fetchStats();
   }, []);
 
@@ -57,7 +80,6 @@ export default function AdminDashboard() {
 
   const paidOrders = stats?.recent_orders?.filter((o: any) => o.is_paid === true) || [];
 
-  // top_products — backend must return: [{ name, sold }]
   const topProducts: { name: string; sold: number }[] =
     (stats?.top_products || []).slice(0, 10).map((p: any) => ({
       name: p.name || p.product__name || 'Unknown',
@@ -65,13 +87,13 @@ export default function AdminDashboard() {
     }));
 
   if (loading) return (
-    <div className="h-screen flex items-center justify-center text-white font-black tracking-widest uppercase animate-pulse">
+    <div className="h-screen flex items-center justify-center bg-[#030303] text-white font-black tracking-widest uppercase animate-pulse">
       Loading Dashboard...
     </div>
   );
 
   return (
-    <div className="relative z-10 space-y-12 p-6">
+    <div className="relative z-10 space-y-12 p-6 bg-[#030303] min-h-screen">
       <header>
         <h2 className="text-5xl font-black tracking-tight text-white uppercase">System Overview</h2>
         <p className="text-gray-500 font-medium mt-3 uppercase tracking-widest text-xs">Store Management Cloud</p>
@@ -94,7 +116,7 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* ── TOP PRODUCTS CHART ── */}
+      {/* TOP PRODUCTS CHART */}
       <motion.div
         initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
         className="bg-white/5 border border-white/10 rounded-[48px] p-10 shadow-2xl backdrop-blur-lg"
@@ -119,14 +141,11 @@ export default function AdminDashboard() {
             <Package className="w-14 h-14 mb-4 opacity-20" />
             <p className="font-black uppercase tracking-widest text-sm">No product data</p>
             <p className="text-xs mt-2 text-gray-600 text-center">
-              Backend API માં{' '}
-              <code className="bg-white/5 px-2 py-0.5 rounded-lg text-indigo-400">top_products</code>
-              {' '}field add કરો — નીચે જુઓ
+              Add Product In Backend 
             </p>
           </div>
         ) : (
           <>
-            {/* Bar Chart */}
             <div className="w-full h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={topProducts} margin={{ top: 0, right: 0, left: -20, bottom: 0 }} barCategoryGap="30%">
@@ -153,7 +172,6 @@ export default function AdminDashboard() {
               </ResponsiveContainer>
             </div>
 
-            {/* Ranked progress list */}
             <div className="mt-8 space-y-3">
               {topProducts.map((product, i) => {
                 const max = topProducts[0]?.sold || 1;

@@ -16,10 +16,14 @@ export default function AdminLoginPage() {
   const [shake, setShake] = useState(false);
 
   // Already logged in as admin → redirect
-  useEffect(() => {
-    const isAdmin = localStorage.getItem("is_admin");
-    if (isAdmin === "true") router.replace("/admin");
-  }, []);
+  // useEffect માં આ રીતે ફેરફાર કરો
+useEffect(() => {
+  const isAdmin = localStorage.getItem("is_admin");
+  const token = localStorage.getItem("token");
+  if (isAdmin === "true" && token) {
+    router.replace("/admin");
+  }
+}, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
